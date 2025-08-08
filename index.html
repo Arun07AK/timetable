@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2Q14 Timetable</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #fafafa;
+            min-height: 100vh;
+            padding: 30px 20px;
+            color: #1a1a1a;
+        }
+
+        /* Controls Styling */
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .today-btn, .week-btn {
+            padding: 12px 24px;
+            border: 2px solid #3b82f6;
+            background: white;
+            color: #3b82f6;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .today-btn.active, .week-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .today-btn:hover, .week-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .current-time {
+            background: #1a1a1a;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+        }
+
+        /* Today's Agenda Styling */
+        .today-agenda {
+            max-width: 1200px;
+            margin: 0 auto 30px auto;
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e5e5;
+        }
+
+        .today-agenda h3 {
+            margin-bottom: 20px;
+            color: #1a1a1a;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .agenda-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .agenda-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+            transition: all 0.2s ease;
+        }
+
+        .agenda-item.current {
+            border-left-color: #dc2626;
+            background: #fef2f2;
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.2);
+        }
+
+        .agenda-item.next {
+            border-left-color: #059669;
+            background: #f0fdf4;
+        }
+
+        .agenda-item.lab {
+            border-left-color: #059669;
+        }
+
+        .agenda-item.tutorial {
+            border-left-color: #dc2626;
+        }
+
+        .agenda-time {
+            font-weight: 600;
+            color: #1a1a1a;
+            min-width: 80px;
+            font-size: 0.9rem;
+        }
+
+        .agenda-details {
+            flex: 1;
+            margin-left: 16px;
+        }
+
+        .agenda-course {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .agenda-meta {
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+
+        .agenda-status {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .agenda-status.current {
+            background: #dc2626;
+            color: white;
+        }
+
+        .agenda-status.next {
+            background: #059669;
+            color: white;
+        }
+
+        .agenda-status.upcoming {
+            background: #e5e5e5;
+            color: #6b7280;
+        }
+
+        .no-classes {
+            text-align: center;
+            color: #6b7280;
+            font-size: 1.1rem;
+            padding: 40px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Today Focus Mode - Dim other days */
+        .timetable-container.today-mode .cell:not(.today-column),
+        .timetable-container.today-mode .header:not(.today-column) {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .timetable-container.today-mode .time-slot {
+            opacity: 1;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a1a1a;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 40px;
+            letter-spacing: -0.02em;
+        }
+
+        .timetable-container {
+            display: grid;
+            grid-template-columns: 120px repeat(5, 1fr);
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e5e5e5;
+            position: relative;
+        }
+
+        /* Live Time Indicator */
+        .time-indicator {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #dc2626, #ef4444);
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+            z-index: 100;
+            transition: top 0.3s ease;
+            display: none;
+        }
+
+        .time-indicator::before {
+            content: 'NOW';
+            position: absolute;
+            left: 8px;
+            top: -8px;
+            background: #dc2626;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .time-indicator::after {
+            content: '';
+            position: absolute;
+            right: 8px;
+            top: -6px;
+            width: 12px;
+            height: 12px;
+            background: #dc2626;
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.3);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 0 6px rgba(220, 38, 38, 0.1);
+                transform: scale(1.1);
+            }
+        }
+
+        /* Current class highlighting */
+        .cell.current-class {
+            border: 2px solid #dc2626 !important;
+            background: linear-gradient(135deg, #fef2f2, #fee2e2) !important;
+            animation: currentClassPulse 3s ease-in-out infinite;
+            position: relative;
+            z-index: 10;
+        }
+
+        .cell.current-class::before {
+            content: 'LIVE';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            background: #dc2626;
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 2px 4px;
+            border-radius: 3px;
+            z-index: 11;
+        }
+
+        @keyframes currentClassPulse {
+            0%, 100% { 
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4);
+            }
+            50% { 
+                box-shadow: 0 0 0 8px rgba(220, 38, 38, 0.1);
+            }
+        }
+
+        /* Next class highlighting */
+        .cell.next-class {
+            border: 2px solid #059669 !important;
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7) !important;
+            position: relative;
+        }
+
+        .cell.next-class::before {
+            content: 'NEXT';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            background: #059669;
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 2px 4px;
+            border-radius: 3px;
+            z-index: 11;
+        }
+
+        /* Time progress indicator in cells */
+        .cell.current-class .course-name::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 2px;
+            background: #dc2626;
+            animation: timeProgress var(--duration, 50m) linear;
+        }
+
+        @keyframes timeProgress {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+
+        .header {
+            background: #1a1a1a;
+            color: white;
+            padding: 20px 16px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-right: 1px solid #333;
+        }
+
+        .header:last-child {
+            border-right: none;
+        }
+
+        .time-slot {
+            background: #f8f8f8;
+            color: #4a4a4a;
+            padding: 18px 12px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 0.85rem;
+            border-right: 1px solid #e5e5e5;
+            border-bottom: 1px solid #e5e5e5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cell {
+            background: white;
+            padding: 16px 12px;
+            text-align: center;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #4a4a4a;
+            border-right: 1px solid #e5e5e5;
+            border-bottom: 1px solid #e5e5e5;
+            transition: all 0.2s ease;
+            cursor: default;
+            position: relative;
+        }
+
+        .cell:hover {
+            background: #f9f9f9;
+        }
+
+        /* Course type styling - clean and minimal */
+        .cell.has-class {
+            background: #fff;
+            border-left: 4px solid #3b82f6;
+            font-weight: 500;
+        }
+
+        .cell.has-class.lab {
+            border-left-color: #059669;
+            background: #f0fdf4;
+        }
+
+        .cell.has-class.tutorial {
+            border-left-color: #dc2626;
+            background: #fef2f2;
+        }
+
+        .cell.has-class.lecture {
+            border-left-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .cell.has-class:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Course content styling */
+        .course-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+            line-height: 1.2;
+        }
+
+        .course-details {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-bottom: 2px;
+        }
+
+        .course-link {
+            font-size: 0.7rem;
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-top: 6px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .cell.clickable {
+            cursor: pointer;
+        }
+
+        .cell.clickable:hover .course-link {
+            background: rgba(59, 130, 246, 0.2);
+        }
+
+        /* Type indicators - simple and clean */
+        .type-indicator {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #3b82f6;
+        }
+
+        .cell.lab .type-indicator {
+            background: #059669;
+        }
+
+        .cell.tutorial .type-indicator {
+            background: #dc2626;
+        }
+
+        .cell.lecture .type-indicator {
+            background: #3b82f6;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.lecture { background: #3b82f6; }
+        .legend-dot.lab { background: #059669; }
+        .legend-dot.tutorial { background: #dc2626; }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #9ca3af;
+            font-size: 0.8rem;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .timetable-container {
+                grid-template-columns: 90px repeat(5, 1fr);
+                font-size: 0.75rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 30px;
+            }
+            
+            .header, .time-slot, .cell {
+                padding: 12px 8px;
+                min-height: 70px;
+            }
+
+            .legend {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .controls {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .today-btn, .week-btn {
+                padding: 10px 20px;
+                font-size: 0.8rem;
+            }
+
+            .current-time {
+                font-size: 0.75rem;
+                padding: 6px 12px;
+            }
+
+            .today-agenda {
+                padding: 20px 16px;
+                margin-bottom: 20px;
+            }
+
+            .agenda-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .agenda-time {
+                min-width: auto;
+                font-size: 0.8rem;
+            }
+
+            .agenda-details {
+                margin-left: 0;
+            }
+
+            /* Mobile time indicator adjustments */
+            .time-indicator::before {
+                left: 4px;
+                font-size: 0.6rem;
+                padding: 1px 4px;
+            }
+
+            .time-indicator::after {
+                right: 4px;
+                width: 10px;
+                height: 10px;
+            }
+
+            .cell.current-class::before,
+            .cell.next-class::before {
+                font-size: 0.55rem;
+                padding: 1px 3px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .timetable-container {
+                grid-template-columns: 70px repeat(5, 1fr);
+            }
+            
+            .header, .time-slot, .cell {
+                padding: 10px 6px;
+                font-size: 0.7rem;
+                min-height: 60px;
+            }
+
+            .today-agenda h3 {
+                font-size: 1.1rem;
+            }
+
+            .agenda-course {
+                font-size: 0.9rem;
+            }
+
+            .agenda-meta {
+                font-size: 0.75rem;
+            }
+
+            /* Extra small screen time indicator */
+            .time-indicator {
+                height: 2px;
+            }
+
+            .time-indicator::before {
+                font-size: 0.5rem;
+                padding: 1px 2px;
+                top: -6px;
+            }
+
+            .time-indicator::after {
+                width: 8px;
+                height: 8px;
+                top: -4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>2Q14 Timetable</h1>
+    
+    <!-- Today's Focus Controls -->
+    <div class="controls">
+        <button id="today-btn" class="today-btn">📅 Today's Focus</button>
+        <button id="week-btn" class="week-btn">📋 Full Week</button>
+        <div id="current-time" class="current-time"></div>
+    </div>
+
+    <!-- Today's Agenda (hidden by default) -->
+    <div id="today-agenda" class="today-agenda hidden">
+        <h3>Today's Schedule</h3>
+        <div id="agenda-content" class="agenda-content">
+            <div class="no-classes">No classes today! 🎉</div>
+        </div>
+    </div>
+    
+    <div class="timetable-container">
+        <!-- Live Time Indicator -->
+        <div id="time-indicator" class="time-indicator"></div>
+        
+        <div class="header">Time</div>
+        <div class="header">Monday</div>
+        <div class="header">Tuesday</div>
+        <div class="header">Wednesday</div>
+        <div class="header">Thursday</div>
+        <div class="header">Friday</div>
+
+        <div class="time-slot">8:00 AM</div>
+        <div class="cell" id="slot1-monday"></div>
+        <div class="cell" id="slot1-tuesday"></div>
+        <div class="cell" id="slot1-wednesday"></div>
+        <div class="cell" id="slot1-thursday"></div>
+        <div class="cell" id="slot1-friday"></div>
+
+        <div class="time-slot">8:50 AM</div>
+        <div class="cell" id="slot2-monday"></div>
+        <div class="cell" id="slot2-tuesday"></div>
+        <div class="cell" id="slot2-wednesday"></div>
+        <div class="cell" id="slot2-thursday"></div>
+        <div class="cell" id="slot2-friday"></div>
+        
+        <div class="time-slot">9:40 AM</div>
+        <div class="cell" id="slot3-monday"></div>
+        <div class="cell" id="slot3-tuesday"></div>
+        <div class="cell" id="slot3-wednesday"></div>
+        <div class="cell" id="slot3-thursday"></div>
+        <div class="cell" id="slot3-friday"></div>
+        
+        <div class="time-slot">10:30 AM</div>
+        <div class="cell" id="slot4-monday"></div>
+        <div class="cell" id="slot4-tuesday"></div>
+        <div class="cell" id="slot4-wednesday"></div>
+        <div class="cell" id="slot4-thursday"></div>
+        <div class="cell" id="slot4-friday"></div>
+        
+        <div class="time-slot">11:20 AM</div>
+        <div class="cell" id="slot5-monday"></div>
+        <div class="cell" id="slot5-tuesday"></div>
+        <div class="cell" id="slot5-wednesday"></div>
+        <div class="cell" id="slot5-thursday"></div>
+        <div class="cell" id="slot5-friday"></div>
+        
+        <div class="time-slot">12:10 PM</div>
+        <div class="cell" id="slot6-monday"></div>
+        <div class="cell" id="slot6-tuesday"></div>
+        <div class="cell" id="slot6-wednesday"></div>
+        <div class="cell" id="slot6-thursday"></div>
+        <div class="cell" id="slot6-friday"></div>
+        
+        <div class="time-slot">1:00 PM</div>
+        <div class="cell" id="slot7-monday"></div>
+        <div class="cell" id="slot7-tuesday"></div>
+        <div class="cell" id="slot7-wednesday"></div>
+        <div class="cell" id="slot7-thursday"></div>
+        <div class="cell" id="slot7-friday"></div>
+        
+        <div class="time-slot">1:50 PM</div>
+        <div class="cell" id="slot8-monday"></div>
+        <div class="cell" id="slot8-tuesday"></div>
+        <div class="cell" id="slot8-wednesday"></div>
+        <div class="cell" id="slot8-thursday"></div>
+        <div class="cell" id="slot8-friday"></div>
+        
+        <div class="time-slot">2:40 PM</div>
+        <div class="cell" id="slot9-monday"></div>
+        <div class="cell" id="slot9-tuesday"></div>
+        <div class="cell" id="slot9-wednesday"></div>
+        <div class="cell" id="slot9-thursday"></div>
+        <div class="cell" id="slot9-friday"></div>
+        
+        <div class="time-slot">3:30 PM</div>
+        <div class="cell" id="slot10-monday"></div>
+        <div class="cell" id="slot10-tuesday"></div>
+        <div class="cell" id="slot10-wednesday"></div>
+        <div class="cell" id="slot10-thursday"></div>
+        <div class="cell" id="slot10-friday"></div>
+        
+        <div class="time-slot">4:20 PM</div>
+        <div class="cell" id="slot11-monday"></div>
+        <div class="cell" id="slot11-tuesday"></div>
+        <div class="cell" id="slot11-wednesday"></div>
+        <div class="cell" id="slot11-thursday"></div>
+        <div class="cell" id="slot11-friday"></div>
+        
+        <div class="time-slot">5:10 PM</div>
+        <div class="cell" id="slot12-monday"></div>
+        <div class="cell" id="slot12-tuesday"></div>
+        <div class="cell" id="slot12-wednesday"></div>
+        <div class="cell" id="slot12-thursday"></div>
+        <div class="cell" id="slot12-friday"></div>
+        
+        <div class="time-slot">6:00 PM</div>
+        <div class="cell" id="slot13-monday"></div>
+        <div class="cell" id="slot13-tuesday"></div>
+        <div class="cell" id="slot13-wednesday"></div>
+        <div class="cell" id="slot13-thursday"></div>
+        <div class="cell" id="slot13-friday"></div>
+        
+        <div class="time-slot">6:50 PM</div>
+        <div class="cell" id="slot14-monday"></div>
+        <div class="cell" id="slot14-tuesday"></div>
+        <div class="cell" id="slot14-wednesday"></div>
+        <div class="cell" id="slot14-thursday"></div>
+        <div class="cell" id="slot14-friday"></div>
+    </div>
+
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-dot lecture"></div>
+            <span>Lecture</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot lab"></div>
+            <span>Lab</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot tutorial"></div>
+            <span>Tutorial</span>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 ARUN AK. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        let timetableData = null;
+        let todayMode = false;
+
+        // Time slots mapping
+        const timeSlots = {
+            'slot1': '8:00 AM',
+            'slot2': '8:50 AM', 
+            'slot3': '9:40 AM',
+            'slot4': '10:30 AM',
+            'slot5': '11:20 AM',
+            'slot6': '12:10 PM',
+            'slot7': '1:00 PM',
+            'slot8': '1:50 PM',
+            'slot9': '2:40 PM',
+            'slot10': '3:30 PM',
+            'slot11': '4:20 PM',
+            'slot12': '5:10 PM',
+            'slot13': '6:00 PM',
+            'slot14': '6:50 PM'
+        };
+
+        // Load timetable data
+        fetch('2q14.json')
+        .then(response => response.json())
+        .then(data => {
+            timetableData = data["2Q14"];
+            populateTimetable(timetableData);
+            initializeTodayMode();
+        })
+        .catch(error => {
+            console.error('Error loading timetable:', error);
+        });
+
+        function populateTimetable(classData) {
+            console.log('Timetable data loaded:', classData);
+            
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+            
+            function getCourseType(courseName) {
+                const name = courseName.toLowerCase();
+                if (name.includes('lab')) return 'lab';
+                if (name.includes('tutorial') || name.includes('tut')) return 'tutorial';
+                return 'lecture';
+            }
+            
+            days.forEach(day => {
+                const dayData = classData[day];
+                
+                for (let slot = 1; slot <= 14; slot++) {
+                    const slotKey = `slot${slot}`;
+                    const cellId = `${slotKey}-${day}`;
+                    const cellElement = document.getElementById(cellId);
+                    
+                    if (cellElement && dayData[slotKey]) {
+                        const courseData = dayData[slotKey];
+                        const courseType = getCourseType(courseData.Course);
+                        
+                        cellElement.innerHTML = `
+                            <div class="course-name">${courseData.Course}</div>
+                            <div class="course-details">${courseData.Room}</div>
+                            <div class="course-details">${courseData.Instructor}</div>
+                            ${courseData.link ? '<div class="course-link">🔗 Click to Join</div>' : ''}
+                            <div class="type-indicator"></div>
+                        `;
+                        
+                        cellElement.classList.add('has-class', courseType);
+                        
+                        if (courseData.link) {
+                            cellElement.classList.add('clickable');
+                            cellElement.style.cursor = 'pointer';
+                            
+                            cellElement.addEventListener('click', () => {
+                                window.open(courseData.link, '_blank');
+                            });
+                        }
+                    }
+                }
+            });
+            
+            console.log('Timetable populated successfully!');
+        }
+
+        function initializeTodayMode() {
+            const todayBtn = document.getElementById('today-btn');
+            const weekBtn = document.getElementById('week-btn');
+            const currentTimeEl = document.getElementById('current-time');
+            
+            // Update current time and live indicator
+            function updateCurrentTime() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('en-US', { 
+                    hour12: true, 
+                    hour: 'numeric', 
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+                const dateString = now.toLocaleDateString('en-US', { 
+                    weekday: 'long',
+                    month: 'short', 
+                    day: 'numeric' 
+                });
+                currentTimeEl.textContent = `${dateString} • ${timeString}`;
+                
+                // Update live time indicator
+                updateLiveTimeIndicator();
+            }
+            
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
+
+            // Button event listeners
+            todayBtn.addEventListener('click', () => {
+                activateTodayMode();
+            });
+
+            weekBtn.addEventListener('click', () => {
+                deactivateTodayMode();
+            });
+        }
+
+        function updateLiveTimeIndicator() {
+            const now = new Date();
+            const currentDay = getCurrentDay();
+            const timeIndicator = document.getElementById('time-indicator');
+            
+            // Only show indicator on weekdays and during class hours
+            if (!currentDay || !isWithinClassHours(now)) {
+                timeIndicator.style.display = 'none';
+                clearClassHighlights();
+                return;
+            }
+            
+            // Calculate position and show indicator
+            const position = calculateTimePosition(now);
+            if (position !== null) {
+                timeIndicator.style.display = 'block';
+                timeIndicator.style.top = `${position}px`;
+                
+                // Update class highlights
+                updateClassHighlights(currentDay, now);
+            } else {
+                timeIndicator.style.display = 'none';
+                clearClassHighlights();
+            }
+        }
+
+        function isWithinClassHours(now) {
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const currentTime = hours * 60 + minutes;
+            
+            // Class hours: 8:00 AM to 7:40 PM (8:00 to 19:40)
+            const startTime = 8 * 60; // 8:00 AM
+            const endTime = 19 * 60 + 40; // 7:40 PM
+            
+            return currentTime >= startTime && currentTime <= endTime;
+        }
+
+        function calculateTimePosition(now) {
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const currentTime = hours * 60 + minutes;
+            
+            // Time slot mapping with exact times
+            const timeSlotPositions = [
+                { start: 8 * 60, end: 8 * 60 + 50, slot: 1 },      // 8:00-8:50
+                { start: 8 * 60 + 50, end: 9 * 60 + 40, slot: 2 }, // 8:50-9:40
+                { start: 9 * 60 + 40, end: 10 * 60 + 30, slot: 3 }, // 9:40-10:30
+                { start: 10 * 60 + 30, end: 11 * 60 + 20, slot: 4 }, // 10:30-11:20
+                { start: 11 * 60 + 20, end: 12 * 60 + 10, slot: 5 }, // 11:20-12:10
+                { start: 12 * 60 + 10, end: 13 * 60, slot: 6 },     // 12:10-13:00
+                { start: 13 * 60, end: 13 * 60 + 50, slot: 7 },     // 13:00-13:50
+                { start: 13 * 60 + 50, end: 14 * 60 + 40, slot: 8 }, // 13:50-14:40
+                { start: 14 * 60 + 40, end: 15 * 60 + 30, slot: 9 }, // 14:40-15:30
+                { start: 15 * 60 + 30, end: 16 * 60 + 20, slot: 10 }, // 15:30-16:20
+                { start: 16 * 60 + 20, end: 17 * 60 + 10, slot: 11 }, // 16:20-17:10
+                { start: 17 * 60 + 10, end: 18 * 60, slot: 12 },     // 17:10-18:00
+                { start: 18 * 60, end: 18 * 60 + 50, slot: 13 },     // 18:00-18:50
+                { start: 18 * 60 + 50, end: 19 * 60 + 40, slot: 14 } // 18:50-19:40
+            ];
+            
+            // Find which time slot we're in
+            const currentSlotData = timeSlotPositions.find(slot => 
+                currentTime >= slot.start && currentTime <= slot.end
+            );
+            
+            if (!currentSlotData) return null;
+            
+            // Calculate exact position within the grid
+            const headerHeight = 60; // Approximate header height
+            const cellHeight = 80;   // Approximate cell height
+            const slotIndex = currentSlotData.slot - 1;
+            
+            // Progress within the current time slot (0-1)
+            const slotProgress = (currentTime - currentSlotData.start) / (currentSlotData.end - currentSlotData.start);
+            
+            // Calculate pixel position
+            const basePosition = headerHeight + (slotIndex * cellHeight);
+            const exactPosition = basePosition + (slotProgress * cellHeight);
+            
+            return exactPosition;
+        }
+
+        function updateClassHighlights(day, now) {
+            clearClassHighlights();
+            
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const currentTime = hours * 60 + minutes;
+            
+            const dayData = timetableData[day];
+            if (!dayData) return;
+            
+            let currentClass = null;
+            let nextClass = null;
+            
+            // Check each slot for current and next classes
+            for (let slot = 1; slot <= 14; slot++) {
+                const slotKey = `slot${slot}`;
+                const slotData = dayData[slotKey];
+                
+                if (slotData) {
+                    const slotTime = getSlotTimeRange(slot);
+                    
+                    // Check if this is the current class
+                    if (currentTime >= slotTime.start && currentTime <= slotTime.end) {
+                        currentClass = { slot, day, data: slotData };
+                    }
+                    // Check if this is the next class
+                    else if (currentTime < slotTime.start && !nextClass) {
+                        nextClass = { slot, day, data: slotData };
+                    }
+                }
+            }
+            
+            // Apply highlights
+            if (currentClass) {
+                const cellId = `slot${currentClass.slot}-${currentClass.day}`;
+                const cell = document.getElementById(cellId);
+                if (cell) {
+                    cell.classList.add('current-class');
+                    
+                    // Add progress animation
+                    const duration = 50 * 60 * 1000; // 50 minutes in milliseconds
+                    cell.style.setProperty('--duration', `${duration}ms`);
+                }
+            }
+            
+            if (nextClass) {
+                const cellId = `slot${nextClass.slot}-${nextClass.day}`;
+                const cell = document.getElementById(cellId);
+                if (cell) {
+                    cell.classList.add('next-class');
+                }
+            }
+        }
+
+        function getSlotTimeRange(slot) {
+            const timeRanges = {
+                1: { start: 8 * 60, end: 8 * 60 + 50 },
+                2: { start: 8 * 60 + 50, end: 9 * 60 + 40 },
+                3: { start: 9 * 60 + 40, end: 10 * 60 + 30 },
+                4: { start: 10 * 60 + 30, end: 11 * 60 + 20 },
+                5: { start: 11 * 60 + 20, end: 12 * 60 + 10 },
+                6: { start: 12 * 60 + 10, end: 13 * 60 },
+                7: { start: 13 * 60, end: 13 * 60 + 50 },
+                8: { start: 13 * 60 + 50, end: 14 * 60 + 40 },
+                9: { start: 14 * 60 + 40, end: 15 * 60 + 30 },
+                10: { start: 15 * 60 + 30, end: 16 * 60 + 20 },
+                11: { start: 16 * 60 + 20, end: 17 * 60 + 10 },
+                12: { start: 17 * 60 + 10, end: 18 * 60 },
+                13: { start: 18 * 60, end: 18 * 60 + 50 },
+                14: { start: 18 * 60 + 50, end: 19 * 60 + 40 }
+            };
+            
+            return timeRanges[slot] || { start: 0, end: 0 };
+        }
+
+        function clearClassHighlights() {
+            document.querySelectorAll('.current-class, .next-class').forEach(cell => {
+                cell.classList.remove('current-class', 'next-class');
+                cell.style.removeProperty('--duration');
+            });
+        }
+
+        function activateTodayMode() {
+            todayMode = true;
+            const todayBtn = document.getElementById('today-btn');
+            const weekBtn = document.getElementById('week-btn');
+            const timetableContainer = document.querySelector('.timetable-container');
+            const todayAgenda = document.getElementById('today-agenda');
+            
+            // Update button states
+            todayBtn.classList.add('active');
+            weekBtn.classList.remove('active');
+            
+            // Show today's agenda
+            todayAgenda.classList.remove('hidden');
+            
+            // Highlight today's column
+            const today = getCurrentDay();
+            if (today) {
+                highlightTodayColumn(today);
+                timetableContainer.classList.add('today-mode');
+                generateTodayAgenda(today);
+            }
+        }
+
+        function deactivateTodayMode() {
+            todayMode = false;
+            const todayBtn = document.getElementById('today-btn');
+            const weekBtn = document.getElementById('week-btn');
+            const timetableContainer = document.querySelector('.timetable-container');
+            const todayAgenda = document.getElementById('today-agenda');
+            
+            // Update button states
+            todayBtn.classList.remove('active');
+            weekBtn.classList.add('active');
+            
+            // Hide today's agenda
+            todayAgenda.classList.add('hidden');
+            
+            // Remove highlighting
+            timetableContainer.classList.remove('today-mode');
+            clearTodayHighlight();
+        }
+
+        function getCurrentDay() {
+            const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const today = new Date().getDay();
+            const dayName = days[today];
+            
+            // Only return if it's a weekday
+            if (dayName === 'monday' || dayName === 'tuesday' || dayName === 'wednesday' || 
+                dayName === 'thursday' || dayName === 'friday') {
+                return dayName;
+            }
+            return null;
+        }
+
+        function highlightTodayColumn(day) {
+            const dayIndex = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'].indexOf(day);
+            if (dayIndex === -1) return;
+            
+            // Highlight header
+            const headers = document.querySelectorAll('.header');
+            if (headers[dayIndex + 1]) { // +1 because first header is "Time"
+                headers[dayIndex + 1].classList.add('today-column');
+            }
+            
+            // Highlight all cells in today's column
+            for (let slot = 1; slot <= 14; slot++) {
+                const cellId = `slot${slot}-${day}`;
+                const cell = document.getElementById(cellId);
+                if (cell) {
+                    cell.classList.add('today-column');
+                }
+            }
+        }
+
+        function clearTodayHighlight() {
+            document.querySelectorAll('.today-column').forEach(el => {
+                el.classList.remove('today-column');
+            });
+        }
+
+        function generateTodayAgenda(day) {
+            const agendaContent = document.getElementById('agenda-content');
+            const dayData = timetableData[day];
+            
+            if (!dayData) {
+                agendaContent.innerHTML = '<div class="no-classes">No data available for today</div>';
+                return;
+            }
+
+            const todayClasses = [];
+            
+            // Collect today's classes
+            for (let slot = 1; slot <= 14; slot++) {
+                const slotKey = `slot${slot}`;
+                if (dayData[slotKey]) {
+                    todayClasses.push({
+                        slot: slotKey,
+                        slotNumber: slot,
+                        time: timeSlots[slotKey],
+                        ...dayData[slotKey]
+                    });
+                }
+            }
+
+            if (todayClasses.length === 0) {
+                agendaContent.innerHTML = '<div class="no-classes">No classes today! 🎉</div>';
+                return;
+            }
+
+            // Get current time for status determination
+            const now = new Date();
+            const currentTime = now.getHours() * 60 + now.getMinutes();
+
+            let agendaHTML = '';
+            let nextClassFound = false;
+            
+            todayClasses.forEach((classItem) => {
+                const slotTimeRange = getSlotTimeRange(classItem.slotNumber);
+                const courseType = getCourseType(classItem.Course);
+                
+                let status = 'upcoming';
+                let statusText = 'Upcoming';
+                
+                // Determine if current, next, or upcoming using the same logic as live indicator
+                if (currentTime >= slotTimeRange.start && currentTime <= slotTimeRange.end) {
+                    status = 'current';
+                    statusText = 'LIVE NOW';
+                } else if (currentTime < slotTimeRange.start && !nextClassFound) {
+                    status = 'next';
+                    const minutesUntil = slotTimeRange.start - currentTime;
+                    statusText = minutesUntil > 60 ? 
+                        `Next • ${Math.floor(minutesUntil / 60)}h ${minutesUntil % 60}m` :
+                        `Next • ${minutesUntil}min`;
+                    nextClassFound = true;
+                }
+
+                agendaHTML += `
+                    <div class="agenda-item ${status} ${courseType}">
+                        <div class="agenda-time">${classItem.time}</div>
+                        <div class="agenda-details">
+                            <div class="agenda-course">${classItem.Course}</div>
+                            <div class="agenda-meta">${classItem.Room} • ${classItem.Instructor}</div>
+                        </div>
+                        <div class="agenda-status ${status}">${statusText}</div>
+                    </div>
+                `;
+            });
+
+            agendaContent.innerHTML = agendaHTML;
+        }
+
+        function getCourseType(courseName) {
+            const name = courseName.toLowerCase();
+            if (name.includes('lab')) return 'lab';
+            if (name.includes('tutorial') || name.includes('tut')) return 'tutorial';
+            return 'lecture';
+        }
+
+        function parseTime(timeStr) {
+            const [time, period] = timeStr.split(' ');
+            let [hours, minutes] = time.split(':').map(Number);
+            
+            if (period === 'PM' && hours !== 12) hours += 12;
+            if (period === 'AM' && hours === 12) hours = 0;
+            
+            return hours * 60 + minutes;
+        }
+
+        // Initialize week mode by default
+        window.addEventListener('load', () => {
+            const weekBtn = document.getElementById('week-btn');
+            weekBtn.classList.add('active');
+            
+            // Initialize live time indicator
+            updateLiveTimeIndicator();
+        });
+    </script>
+</body>
+</html>
