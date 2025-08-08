@@ -196,9 +196,11 @@
             max-width: 1200px;
             margin: 0 auto;
             overflow-x: auto;
+            overflow-y: visible;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: thin;
             scrollbar-color: #cbd5e0 #f7fafc;
+            padding: 0 10px; /* Add padding to prevent edge cutoff */
         }
 
         .timetable-wrapper::-webkit-scrollbar {
@@ -222,7 +224,7 @@
         .timetable-container {
             display: grid;
             grid-template-columns: 120px repeat(5, 1fr);
-            min-width: 800px; /* Minimum width to prevent crushing */
+            min-width: 900px; /* Increased minimum width to prevent crushing */
             background: white;
             border-radius: 12px;
             overflow: hidden;
@@ -531,12 +533,16 @@
         /* Enhanced Mobile Responsiveness */
         @media (max-width: 768px) {
             body {
-                padding: 20px 10px;
+                padding: 15px 5px; /* Reduced padding for more scroll space */
+            }
+
+            .timetable-wrapper {
+                padding: 0 5px; /* Reduced wrapper padding on mobile */
             }
 
             .timetable-container {
-                grid-template-columns: 80px repeat(5, 1fr);
-                min-width: 600px; /* Reduced minimum width for mobile */
+                grid-template-columns: 90px repeat(5, minmax(140px, 1fr));
+                min-width: 800px; /* Increased for mobile */
                 font-size: 0.7rem;
             }
             
@@ -648,22 +654,31 @@
 
             /* Mobile scroll hint */
             .timetable-wrapper::before {
-                content: "← Swipe to see more →";
+                content: "← Swipe left and right to see all days →";
                 display: block;
                 text-align: center;
-                font-size: 0.7rem;
+                font-size: 0.65rem;
                 color: #6b7280;
-                padding: 8px;
+                padding: 6px;
                 background: #f8f9fa;
                 border-radius: 6px 6px 0 0;
                 border-bottom: 1px solid #e5e5e5;
+                font-weight: 500;
             }
         }
 
         @media (max-width: 480px) {
+            body {
+                padding: 10px 2px; /* Minimal padding for maximum scroll space */
+            }
+
+            .timetable-wrapper {
+                padding: 0 3px; /* Minimal wrapper padding */
+            }
+
             .timetable-container {
-                grid-template-columns: 70px repeat(5, 1fr);
-                min-width: 500px; /* Further reduced for very small screens */
+                grid-template-columns: 80px repeat(5, minmax(120px, 1fr));
+                min-width: 720px; /* Increased for very small screens */
             }
             
             .header, .time-slot, .cell {
@@ -710,8 +725,8 @@
         /* Tablet landscape improvements */
         @media (min-width: 769px) and (max-width: 1024px) {
             .timetable-container {
-                grid-template-columns: 100px repeat(5, 1fr);
-                min-width: 700px;
+                grid-template-columns: 100px repeat(5, minmax(150px, 1fr));
+                min-width: 850px;
             }
 
             .header, .time-slot, .cell {
