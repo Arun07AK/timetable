@@ -200,7 +200,7 @@
             -webkit-overflow-scrolling: touch;
             scrollbar-width: thin;
             scrollbar-color: #cbd5e0 #f7fafc;
-            padding: 0 10px; /* Add padding to prevent edge cutoff */
+            padding: 0 15px; /* Increased padding to ensure full visibility */
         }
 
         .timetable-wrapper::-webkit-scrollbar {
@@ -223,14 +223,24 @@
 
         .timetable-container {
             display: grid;
-            grid-template-columns: 120px repeat(5, 1fr);
-            min-width: 900px; /* Increased minimum width to prevent crushing */
+            grid-template-columns: 120px repeat(5, minmax(180px, 1fr));
+            min-width: 1220px; /* Calculated: 120px + (5 × 180px) + margins */
             background: white;
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             border: 1px solid #e5e5e5;
             position: relative;
+        }
+
+        /* Ensure Friday column is fully visible */
+        .timetable-container::after {
+            content: '';
+            width: 20px;
+            height: 1px;
+            position: absolute;
+            right: -20px;
+            top: 0;
         }
 
         /* Instagram Profile Link Styles */
@@ -537,12 +547,12 @@
             }
 
             .timetable-wrapper {
-                padding: 0 5px; /* Reduced wrapper padding on mobile */
+                padding: 0 10px; /* Increased wrapper padding on mobile */
             }
 
             .timetable-container {
-                grid-template-columns: 90px repeat(5, minmax(140px, 1fr));
-                min-width: 800px; /* Increased for mobile */
+                grid-template-columns: 90px repeat(5, minmax(160px, 1fr));
+                min-width: 990px; /* Calculated: 90px + (5 × 160px) + margins */
                 font-size: 0.7rem;
             }
             
@@ -673,12 +683,12 @@
             }
 
             .timetable-wrapper {
-                padding: 0 3px; /* Minimal wrapper padding */
+                padding: 0 8px; /* Increased wrapper padding for small screens */
             }
 
             .timetable-container {
-                grid-template-columns: 80px repeat(5, minmax(120px, 1fr));
-                min-width: 720px; /* Increased for very small screens */
+                grid-template-columns: 80px repeat(5, minmax(150px, 1fr));
+                min-width: 930px; /* Calculated: 80px + (5 × 150px) + margins */
             }
             
             .header, .time-slot, .cell {
@@ -725,8 +735,8 @@
         /* Tablet landscape improvements */
         @media (min-width: 769px) and (max-width: 1024px) {
             .timetable-container {
-                grid-template-columns: 100px repeat(5, minmax(150px, 1fr));
-                min-width: 850px;
+                grid-template-columns: 100px repeat(5, minmax(170px, 1fr));
+                min-width: 1050px; /* Calculated: 100px + (5 × 170px) + margins */
             }
 
             .header, .time-slot, .cell {
