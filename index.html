@@ -204,55 +204,62 @@
             position: relative;
         }
 
-        /* Live Time Indicator */
-        .time-indicator {
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #dc2626, #ef4444);
-            box-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
-            z-index: 100;
-            transition: top 0.3s ease;
-            display: none;
+        /* Instagram Profile Link Styles */
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
         }
 
-        .time-indicator::before {
-            content: 'NOW';
-            position: absolute;
-            left: 8px;
-            top: -8px;
-            background: #dc2626;
+        .social-links {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .insta-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #4a4a4a;
+            padding: 8px 16px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e5e5e5;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .insta-link:hover {
+            background: linear-gradient(135deg, #833AB4, #FD1D1D, #F77737);
             color: white;
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(131, 58, 180, 0.3);
         }
 
-        .time-indicator::after {
-            content: '';
-            position: absolute;
-            right: 8px;
-            top: -6px;
-            width: 12px;
-            height: 12px;
-            background: #dc2626;
-            border-radius: 50%;
-            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.3);
-            animation: pulse 2s infinite;
+        .insta-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #833AB4, #FD1D1D, #F77737);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
         }
 
-        @keyframes pulse {
-            0%, 100% { 
-                box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.3);
-                transform: scale(1);
-            }
-            50% { 
-                box-shadow: 0 0 0 6px rgba(220, 38, 38, 0.1);
-                transform: scale(1.1);
-            }
+        .insta-link:hover .insta-icon {
+            background: white;
+            color: #833AB4;
+        }
+
+        .creator-text {
+            color: #6b7280;
+            font-size: 0.8rem;
         }
 
         /* Current class highlighting */
@@ -551,19 +558,6 @@
                 margin-left: 0;
             }
 
-            /* Mobile time indicator adjustments */
-            .time-indicator::before {
-                left: 4px;
-                font-size: 0.6rem;
-                padding: 1px 4px;
-            }
-
-            .time-indicator::after {
-                right: 4px;
-                width: 10px;
-                height: 10px;
-            }
-
             .cell.current-class::before,
             .cell.next-class::before {
                 font-size: 0.55rem;
@@ -593,24 +587,11 @@
             .agenda-meta {
                 font-size: 0.75rem;
             }
-
-            /* Extra small screen time indicator */
-            .time-indicator {
-                height: 2px;
-            }
-
-            .time-indicator::before {
-                font-size: 0.5rem;
-                padding: 1px 2px;
-                top: -6px;
-            }
-
-            .time-indicator::after {
-                width: 8px;
-                height: 8px;
-                top: -4px;
-            }
         }
+        .timetable-wrapper {
+    overflow-x: auto; /* Enables horizontal scrolling */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
     </style>
 </head>
 <body>
@@ -630,11 +611,8 @@
             <div class="no-classes">No classes today! 🎉</div>
         </div>
     </div>
-    
+    <div class="timetable-wrapper">
     <div class="timetable-container">
-        <!-- Live Time Indicator -->
-        <div id="time-indicator" class="time-indicator"></div>
-        
         <div class="header">Time</div>
         <div class="header">Monday</div>
         <div class="header">Tuesday</div>
@@ -740,6 +718,7 @@
         <div class="cell" id="slot14-thursday"></div>
         <div class="cell" id="slot14-friday"></div>
     </div>
+    </div>
 
     <div class="legend">
         <div class="legend-item">
@@ -757,7 +736,15 @@
     </div>
     
     <footer>
-        <p>&copy; 2025 ARUN AK. All Rights Reserved.</p>
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="https://www.instagram.com/your_username" target="_blank" class="insta-link">
+                    <span class="insta-icon">📷</span>
+                    <span>@your_username</span>
+                </a>
+            </div>
+            <p class="creator-text">&copy; 2025 Created by ARUN AK. All Rights Reserved.</p>
+        </div>
     </footer>
 
     <script>
@@ -848,7 +835,7 @@
             const weekBtn = document.getElementById('week-btn');
             const currentTimeEl = document.getElementById('current-time');
             
-            // Update current time and live indicator
+            // Update current time
             function updateCurrentTime() {
                 const now = new Date();
                 const timeString = now.toLocaleTimeString('en-US', { 
@@ -864,8 +851,11 @@
                 });
                 currentTimeEl.textContent = `${dateString} • ${timeString}`;
                 
-                // Update live time indicator
-                updateLiveTimeIndicator();
+                // Update class highlights
+                const currentDay = getCurrentDay();
+                if (currentDay) {
+                    updateClassHighlights(currentDay, now);
+                }
             }
             
             updateCurrentTime();
@@ -879,89 +869,6 @@
             weekBtn.addEventListener('click', () => {
                 deactivateTodayMode();
             });
-        }
-
-        function updateLiveTimeIndicator() {
-            const now = new Date();
-            const currentDay = getCurrentDay();
-            const timeIndicator = document.getElementById('time-indicator');
-            
-            // Only show indicator on weekdays and during class hours
-            if (!currentDay || !isWithinClassHours(now)) {
-                timeIndicator.style.display = 'none';
-                clearClassHighlights();
-                return;
-            }
-            
-            // Calculate position and show indicator
-            const position = calculateTimePosition(now);
-            if (position !== null) {
-                timeIndicator.style.display = 'block';
-                timeIndicator.style.top = `${position}px`;
-                
-                // Update class highlights
-                updateClassHighlights(currentDay, now);
-            } else {
-                timeIndicator.style.display = 'none';
-                clearClassHighlights();
-            }
-        }
-
-        function isWithinClassHours(now) {
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            const currentTime = hours * 60 + minutes;
-            
-            // Class hours: 8:00 AM to 7:40 PM (8:00 to 19:40)
-            const startTime = 8 * 60; // 8:00 AM
-            const endTime = 19 * 60 + 40; // 7:40 PM
-            
-            return currentTime >= startTime && currentTime <= endTime;
-        }
-
-        function calculateTimePosition(now) {
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            const currentTime = hours * 60 + minutes;
-            
-            // Time slot mapping with exact times
-            const timeSlotPositions = [
-                { start: 8 * 60, end: 8 * 60 + 50, slot: 1 },      // 8:00-8:50
-                { start: 8 * 60 + 50, end: 9 * 60 + 40, slot: 2 }, // 8:50-9:40
-                { start: 9 * 60 + 40, end: 10 * 60 + 30, slot: 3 }, // 9:40-10:30
-                { start: 10 * 60 + 30, end: 11 * 60 + 20, slot: 4 }, // 10:30-11:20
-                { start: 11 * 60 + 20, end: 12 * 60 + 10, slot: 5 }, // 11:20-12:10
-                { start: 12 * 60 + 10, end: 13 * 60, slot: 6 },     // 12:10-13:00
-                { start: 13 * 60, end: 13 * 60 + 50, slot: 7 },     // 13:00-13:50
-                { start: 13 * 60 + 50, end: 14 * 60 + 40, slot: 8 }, // 13:50-14:40
-                { start: 14 * 60 + 40, end: 15 * 60 + 30, slot: 9 }, // 14:40-15:30
-                { start: 15 * 60 + 30, end: 16 * 60 + 20, slot: 10 }, // 15:30-16:20
-                { start: 16 * 60 + 20, end: 17 * 60 + 10, slot: 11 }, // 16:20-17:10
-                { start: 17 * 60 + 10, end: 18 * 60, slot: 12 },     // 17:10-18:00
-                { start: 18 * 60, end: 18 * 60 + 50, slot: 13 },     // 18:00-18:50
-                { start: 18 * 60 + 50, end: 19 * 60 + 40, slot: 14 } // 18:50-19:40
-            ];
-            
-            // Find which time slot we're in
-            const currentSlotData = timeSlotPositions.find(slot => 
-                currentTime >= slot.start && currentTime <= slot.end
-            );
-            
-            if (!currentSlotData) return null;
-            
-            // Calculate exact position within the grid
-            const headerHeight = 60; // Approximate header height
-            const cellHeight = 80;   // Approximate cell height
-            const slotIndex = currentSlotData.slot - 1;
-            
-            // Progress within the current time slot (0-1)
-            const slotProgress = (currentTime - currentSlotData.start) / (currentSlotData.end - currentSlotData.start);
-            
-            // Calculate pixel position
-            const basePosition = headerHeight + (slotIndex * cellHeight);
-            const exactPosition = basePosition + (slotProgress * cellHeight);
-            
-            return exactPosition;
         }
 
         function updateClassHighlights(day, now) {
@@ -1219,9 +1126,6 @@
         window.addEventListener('load', () => {
             const weekBtn = document.getElementById('week-btn');
             weekBtn.classList.add('active');
-            
-            // Initialize live time indicator
-            updateLiveTimeIndicator();
         });
     </script>
 </body>
