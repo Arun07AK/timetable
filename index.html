@@ -16,7 +16,7 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: #fafafa;
             min-height: 100vh;
-            padding: 20px 10px;
+            padding: 30px 20px;
             color: #1a1a1a;
         }
 
@@ -191,23 +191,44 @@
             letter-spacing: -0.02em;
         }
 
-        /* Desktop-first timetable wrapper */
+        /* Timetable wrapper for horizontal scroll */
         .timetable-wrapper {
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            border: 1px solid #e5e5e5;
             max-width: 1200px;
+            margin: 0 auto;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e0 #f7fafc;
+        }
+
+        .timetable-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .timetable-wrapper::-webkit-scrollbar-track {
+            background: #f7fafc;
+            border-radius: 4px;
+        }
+
+        .timetable-wrapper::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 4px;
+        }
+
+        .timetable-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
         }
 
         .timetable-container {
             display: grid;
             grid-template-columns: 120px repeat(5, 1fr);
+            min-width: 800px; /* Minimum width to prevent crushing */
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e5e5e5;
             position: relative;
-            min-width: 1000px; /* Only applies when screen is smaller */
         }
 
         /* Instagram Profile Link Styles */
@@ -347,7 +368,6 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
             border-right: 1px solid #333;
-            white-space: nowrap;
         }
 
         .header:last-child {
@@ -366,7 +386,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            white-space: nowrap;
         }
 
         .cell {
@@ -425,6 +444,7 @@
             color: #1a1a1a;
             margin-bottom: 6px;
             line-height: 1.2;
+            position: relative;
         }
 
         .course-details {
@@ -508,38 +528,73 @@
             font-size: 0.8rem;
         }
 
-        /* Mobile responsive design */
-        @media (max-width: 1200px) {
-            .timetable-wrapper {
-                margin: 0 20px;
-            }
-        }
-
+        /* Enhanced Mobile Responsiveness */
         @media (max-width: 768px) {
             body {
-                padding: 15px 5px;
+                padding: 20px 10px;
             }
 
+            .timetable-container {
+                grid-template-columns: 80px repeat(5, 1fr);
+                min-width: 600px; /* Reduced minimum width for mobile */
+                font-size: 0.7rem;
+            }
+            
             h1 {
                 font-size: 1.8rem;
                 margin-bottom: 25px;
             }
+            
+            .header, .time-slot, .cell {
+                padding: 10px 6px;
+                min-height: 65px;
+            }
+
+            .header {
+                font-size: 0.75rem;
+                padding: 15px 8px;
+            }
+
+            .time-slot {
+                font-size: 0.7rem;
+                padding: 12px 4px;
+            }
+
+            .course-name {
+                font-size: 0.75rem;
+                margin-bottom: 4px;
+            }
+
+            .course-details {
+                font-size: 0.65rem;
+            }
+
+            .course-link {
+                font-size: 0.6rem;
+                padding: 3px 6px;
+                margin-top: 4px;
+            }
+
+            .legend {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
 
             .controls {
                 flex-direction: column;
-                gap: 10px;
-                margin-bottom: 20px;
+                gap: 12px;
             }
 
             .today-btn, .week-btn {
                 padding: 10px 20px;
-                font-size: 0.85rem;
+                font-size: 0.8rem;
                 width: 100%;
-                max-width: 300px;
+                max-width: 200px;
             }
 
             .current-time {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
                 padding: 6px 12px;
             }
 
@@ -576,87 +631,45 @@
                 font-size: 0.75rem;
             }
 
-            /* Timetable adjustments for mobile */
-            .timetable-wrapper {
-                border-radius: 8px;
-                margin: 0 -5px; /* Extend to screen edges on mobile */
-            }
-
-            .timetable-container {
-                grid-template-columns: 80px repeat(5, 150px);
-                min-width: 830px;
-            }
-
-            .header, .time-slot, .cell {
-                padding: 12px 8px;
-                min-height: 70px;
-                font-size: 0.75rem;
-            }
-
-            .course-name {
-                font-size: 0.75rem;
-            }
-
-            .course-details {
-                font-size: 0.65rem;
-            }
-
-            .course-link {
-                font-size: 0.6rem;
-                padding: 3px 6px;
-                margin-top: 4px;
-            }
-
             .cell.current-class::before,
             .cell.next-class::before {
-                font-size: 0.55rem;
+                font-size: 0.5rem;
                 padding: 1px 3px;
+                top: 2px;
+                left: 2px;
             }
 
-            .legend {
-                flex-wrap: wrap;
-                gap: 16px;
-                justify-content: center;
+            .type-indicator {
+                width: 6px;
+                height: 6px;
+                top: 6px;
+                right: 6px;
             }
 
-            .legend-item {
-                font-size: 0.75rem;
-            }
-
-            /* Scroll indicator for mobile */
-            .timetable-wrapper::after {
-                content: '← Swipe to see more →';
-                position: absolute;
-                bottom: -30px;
-                left: 50%;
-                transform: translateX(-50%);
+            /* Mobile scroll hint */
+            .timetable-wrapper::before {
+                content: "← Swipe to see more →";
+                display: block;
+                text-align: center;
                 font-size: 0.7rem;
                 color: #6b7280;
-                text-align: center;
-                white-space: nowrap;
-            }
-
-            .timetable-wrapper {
-                position: relative;
-                margin-bottom: 40px;
+                padding: 8px;
+                background: #f8f9fa;
+                border-radius: 6px 6px 0 0;
+                border-bottom: 1px solid #e5e5e5;
             }
         }
 
         @media (max-width: 480px) {
-            h1 {
-                font-size: 1.5rem;
-                margin-bottom: 20px;
-            }
-
             .timetable-container {
-                grid-template-columns: 70px repeat(5, 130px);
-                min-width: 720px;
+                grid-template-columns: 70px repeat(5, 1fr);
+                min-width: 500px; /* Further reduced for very small screens */
             }
-
+            
             .header, .time-slot, .cell {
-                padding: 10px 6px;
-                min-height: 65px;
-                font-size: 0.7rem;
+                padding: 8px 4px;
+                font-size: 0.65rem;
+                min-height: 55px;
             }
 
             .course-name {
@@ -665,6 +678,15 @@
 
             .course-details {
                 font-size: 0.6rem;
+            }
+
+            .course-link {
+                font-size: 0.55rem;
+                padding: 2px 4px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
             }
 
             .today-agenda h3 {
@@ -674,20 +696,37 @@
             .agenda-course {
                 font-size: 0.85rem;
             }
+
+            .agenda-meta {
+                font-size: 0.7rem;
+            }
+
+            .current-time {
+                font-size: 0.65rem;
+                padding: 5px 8px;
+            }
         }
-        .timetable-container {
-    display: grid;
-    /* This ensures each day column is at least 150px wide, forcing the grid to overflow */
-    grid-template-columns: 120px repeat(5, minmax(150px, 1fr));
-    max-width: 1200px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 12px;
-    /* REMOVE the 'overflow: hidden;' line here */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    border: 1px solid #e5e5e5;
-    position: relative;
-}
+
+        /* Tablet landscape improvements */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .timetable-container {
+                grid-template-columns: 100px repeat(5, 1fr);
+                min-width: 700px;
+            }
+
+            .header, .time-slot, .cell {
+                padding: 14px 10px;
+                min-height: 75px;
+            }
+
+            .course-name {
+                font-size: 0.8rem;
+            }
+
+            .course-details {
+                font-size: 0.7rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -707,7 +746,8 @@
             <div class="no-classes">No classes today! 🎉</div>
         </div>
     </div>
-
+    
+    <!-- Added wrapper for horizontal scrolling -->
     <div class="timetable-wrapper">
         <div class="timetable-container">
             <div class="header">Time</div>
@@ -848,24 +888,35 @@
         let timetableData = null;
         let todayMode = false;
 
-  
-        // Initialize with sample data (replace with actual JSON fetch)
-        function initializeApp() {
-            // Try to fetch from JSON file, fallback to sample data
-            fetch('2q14.json')
-                .then(response => response.json())
-                .then(data => {
-                    timetableData = data["2Q14"];
-                    populateTimetable(timetableData);
-                    initializeTodayMode();
-                })
-                .catch(error => {
-                    console.log('JSON file not found, using sample data');
-                    timetableData = sampleData["2Q14"];
-                    populateTimetable(timetableData);
-                    initializeTodayMode();
-                });
-        }
+        // Time slots mapping
+        const timeSlots = {
+            'slot1': '8:00 AM',
+            'slot2': '8:50 AM', 
+            'slot3': '9:40 AM',
+            'slot4': '10:30 AM',
+            'slot5': '11:20 AM',
+            'slot6': '12:10 PM',
+            'slot7': '1:00 PM',
+            'slot8': '1:50 PM',
+            'slot9': '2:40 PM',
+            'slot10': '3:30 PM',
+            'slot11': '4:20 PM',
+            'slot12': '5:10 PM',
+            'slot13': '6:00 PM',
+            'slot14': '6:50 PM'
+        };
+
+        // Load timetable data
+        fetch('2q14.json')
+        .then(response => response.json())
+        .then(data => {
+            timetableData = data["2Q14"];
+            populateTimetable(timetableData);
+            initializeTodayMode();
+        })
+        .catch(error => {
+            console.error('Error loading timetable:', error);
+        });
 
         function populateTimetable(classData) {
             console.log('Timetable data loaded:', classData);
@@ -887,7 +938,7 @@
                     const cellId = `${slotKey}-${day}`;
                     const cellElement = document.getElementById(cellId);
                     
-                    if (cellElement && dayData && dayData[slotKey]) {
+                    if (cellElement && dayData[slotKey]) {
                         const courseData = dayData[slotKey];
                         const courseType = getCourseType(courseData.Course);
                         
@@ -1208,11 +1259,10 @@
             return hours * 60 + minutes;
         }
 
-        // Initialize the app when page loads
+        // Initialize week mode by default
         window.addEventListener('load', () => {
             const weekBtn = document.getElementById('week-btn');
             weekBtn.classList.add('active');
-            initializeApp();
         });
     </script>
 </body>
