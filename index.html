@@ -16,7 +16,7 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: #fafafa;
             min-height: 100vh;
-            padding: 30px 20px;
+            padding: 20px 10px;
             color: #1a1a1a;
         }
 
@@ -191,17 +191,23 @@
             letter-spacing: -0.02em;
         }
 
-        .timetable-container {
-            display: grid;
-            grid-template-columns: 120px repeat(5, 1fr);
-            max-width: 1200px;
+        /* Desktop-first timetable wrapper */
+        .timetable-wrapper {
             margin: 0 auto;
             background: white;
             border-radius: 12px;
-            overflow: hidden;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             border: 1px solid #e5e5e5;
+            max-width: 1200px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .timetable-container {
+            display: grid;
+            grid-template-columns: 120px repeat(5, 1fr);
             position: relative;
+            min-width: 1000px; /* Only applies when screen is smaller */
         }
 
         /* Instagram Profile Link Styles */
@@ -341,6 +347,7 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
             border-right: 1px solid #333;
+            white-space: nowrap;
         }
 
         .header:last-child {
@@ -359,6 +366,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            white-space: nowrap;
         }
 
         .cell {
@@ -500,37 +508,34 @@
             font-size: 0.8rem;
         }
 
-        /* Responsive design */
+        /* Mobile responsive design */
+        @media (max-width: 1200px) {
+            .timetable-wrapper {
+                margin: 0 20px;
+            }
+        }
+
         @media (max-width: 768px) {
-            .timetable-container {
-                grid-template-columns: 90px repeat(5, 1fr);
-                font-size: 0.75rem;
-            }
-            
-            h1 {
-                font-size: 2rem;
-                margin-bottom: 30px;
-            }
-            
-            .header, .time-slot, .cell {
-                padding: 12px 8px;
-                min-height: 70px;
+            body {
+                padding: 15px 5px;
             }
 
-            .legend {
-                flex-direction: column;
-                align-items: center;
-                gap: 12px;
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 25px;
             }
 
             .controls {
                 flex-direction: column;
-                gap: 12px;
+                gap: 10px;
+                margin-bottom: 20px;
             }
 
             .today-btn, .week-btn {
                 padding: 10px 20px;
-                font-size: 0.8rem;
+                font-size: 0.85rem;
+                width: 100%;
+                max-width: 300px;
             }
 
             .current-time {
@@ -539,14 +544,19 @@
             }
 
             .today-agenda {
-                padding: 20px 16px;
+                padding: 16px;
                 margin-bottom: 20px;
+            }
+
+            .today-agenda h3 {
+                font-size: 1.1rem;
             }
 
             .agenda-item {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 8px;
+                padding: 12px;
             }
 
             .agenda-time {
@@ -558,28 +568,6 @@
                 margin-left: 0;
             }
 
-            .cell.current-class::before,
-            .cell.next-class::before {
-                font-size: 0.55rem;
-                padding: 1px 3px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .timetable-container {
-                grid-template-columns: 70px repeat(5, 1fr);
-            }
-            
-            .header, .time-slot, .cell {
-                padding: 10px 6px;
-                font-size: 0.7rem;
-                min-height: 60px;
-            }
-
-            .today-agenda h3 {
-                font-size: 1.1rem;
-            }
-
             .agenda-course {
                 font-size: 0.9rem;
             }
@@ -587,10 +575,118 @@
             .agenda-meta {
                 font-size: 0.75rem;
             }
+
+            /* Timetable adjustments for mobile */
+            .timetable-wrapper {
+                border-radius: 8px;
+                margin: 0 -5px; /* Extend to screen edges on mobile */
+            }
+
+            .timetable-container {
+                grid-template-columns: 80px repeat(5, 150px);
+                min-width: 830px;
+            }
+
+            .header, .time-slot, .cell {
+                padding: 12px 8px;
+                min-height: 70px;
+                font-size: 0.75rem;
+            }
+
+            .course-name {
+                font-size: 0.75rem;
+            }
+
+            .course-details {
+                font-size: 0.65rem;
+            }
+
+            .course-link {
+                font-size: 0.6rem;
+                padding: 3px 6px;
+                margin-top: 4px;
+            }
+
+            .cell.current-class::before,
+            .cell.next-class::before {
+                font-size: 0.55rem;
+                padding: 1px 3px;
+            }
+
+            .legend {
+                flex-wrap: wrap;
+                gap: 16px;
+                justify-content: center;
+            }
+
+            .legend-item {
+                font-size: 0.75rem;
+            }
+
+            /* Scroll indicator for mobile */
+            .timetable-wrapper::after {
+                content: '← Swipe to see more →';
+                position: absolute;
+                bottom: -30px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 0.7rem;
+                color: #6b7280;
+                text-align: center;
+                white-space: nowrap;
+            }
+
+            .timetable-wrapper {
+                position: relative;
+                margin-bottom: 40px;
+            }
         }
-        .timetable-wrapper {
-    overflow-x: auto; /* Enables horizontal scrolling */
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+
+            .timetable-container {
+                grid-template-columns: 70px repeat(5, 130px);
+                min-width: 720px;
+            }
+
+            .header, .time-slot, .cell {
+                padding: 10px 6px;
+                min-height: 65px;
+                font-size: 0.7rem;
+            }
+
+            .course-name {
+                font-size: 0.7rem;
+            }
+
+            .course-details {
+                font-size: 0.6rem;
+            }
+
+            .today-agenda h3 {
+                font-size: 1rem;
+            }
+
+            .agenda-course {
+                font-size: 0.85rem;
+            }
+        }
+        .timetable-container {
+    display: grid;
+    /* This ensures each day column is at least 150px wide, forcing the grid to overflow */
+    grid-template-columns: 120px repeat(5, minmax(150px, 1fr));
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    /* REMOVE the 'overflow: hidden;' line here */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e5e5e5;
+    position: relative;
 }
     </style>
 </head>
@@ -611,113 +707,114 @@
             <div class="no-classes">No classes today! 🎉</div>
         </div>
     </div>
+
     <div class="timetable-wrapper">
-    <div class="timetable-container">
-        <div class="header">Time</div>
-        <div class="header">Monday</div>
-        <div class="header">Tuesday</div>
-        <div class="header">Wednesday</div>
-        <div class="header">Thursday</div>
-        <div class="header">Friday</div>
+        <div class="timetable-container">
+            <div class="header">Time</div>
+            <div class="header">Monday</div>
+            <div class="header">Tuesday</div>
+            <div class="header">Wednesday</div>
+            <div class="header">Thursday</div>
+            <div class="header">Friday</div>
 
-        <div class="time-slot">8:00 AM</div>
-        <div class="cell" id="slot1-monday"></div>
-        <div class="cell" id="slot1-tuesday"></div>
-        <div class="cell" id="slot1-wednesday"></div>
-        <div class="cell" id="slot1-thursday"></div>
-        <div class="cell" id="slot1-friday"></div>
+            <div class="time-slot">8:00 AM</div>
+            <div class="cell" id="slot1-monday"></div>
+            <div class="cell" id="slot1-tuesday"></div>
+            <div class="cell" id="slot1-wednesday"></div>
+            <div class="cell" id="slot1-thursday"></div>
+            <div class="cell" id="slot1-friday"></div>
 
-        <div class="time-slot">8:50 AM</div>
-        <div class="cell" id="slot2-monday"></div>
-        <div class="cell" id="slot2-tuesday"></div>
-        <div class="cell" id="slot2-wednesday"></div>
-        <div class="cell" id="slot2-thursday"></div>
-        <div class="cell" id="slot2-friday"></div>
-        
-        <div class="time-slot">9:40 AM</div>
-        <div class="cell" id="slot3-monday"></div>
-        <div class="cell" id="slot3-tuesday"></div>
-        <div class="cell" id="slot3-wednesday"></div>
-        <div class="cell" id="slot3-thursday"></div>
-        <div class="cell" id="slot3-friday"></div>
-        
-        <div class="time-slot">10:30 AM</div>
-        <div class="cell" id="slot4-monday"></div>
-        <div class="cell" id="slot4-tuesday"></div>
-        <div class="cell" id="slot4-wednesday"></div>
-        <div class="cell" id="slot4-thursday"></div>
-        <div class="cell" id="slot4-friday"></div>
-        
-        <div class="time-slot">11:20 AM</div>
-        <div class="cell" id="slot5-monday"></div>
-        <div class="cell" id="slot5-tuesday"></div>
-        <div class="cell" id="slot5-wednesday"></div>
-        <div class="cell" id="slot5-thursday"></div>
-        <div class="cell" id="slot5-friday"></div>
-        
-        <div class="time-slot">12:10 PM</div>
-        <div class="cell" id="slot6-monday"></div>
-        <div class="cell" id="slot6-tuesday"></div>
-        <div class="cell" id="slot6-wednesday"></div>
-        <div class="cell" id="slot6-thursday"></div>
-        <div class="cell" id="slot6-friday"></div>
-        
-        <div class="time-slot">1:00 PM</div>
-        <div class="cell" id="slot7-monday"></div>
-        <div class="cell" id="slot7-tuesday"></div>
-        <div class="cell" id="slot7-wednesday"></div>
-        <div class="cell" id="slot7-thursday"></div>
-        <div class="cell" id="slot7-friday"></div>
-        
-        <div class="time-slot">1:50 PM</div>
-        <div class="cell" id="slot8-monday"></div>
-        <div class="cell" id="slot8-tuesday"></div>
-        <div class="cell" id="slot8-wednesday"></div>
-        <div class="cell" id="slot8-thursday"></div>
-        <div class="cell" id="slot8-friday"></div>
-        
-        <div class="time-slot">2:40 PM</div>
-        <div class="cell" id="slot9-monday"></div>
-        <div class="cell" id="slot9-tuesday"></div>
-        <div class="cell" id="slot9-wednesday"></div>
-        <div class="cell" id="slot9-thursday"></div>
-        <div class="cell" id="slot9-friday"></div>
-        
-        <div class="time-slot">3:30 PM</div>
-        <div class="cell" id="slot10-monday"></div>
-        <div class="cell" id="slot10-tuesday"></div>
-        <div class="cell" id="slot10-wednesday"></div>
-        <div class="cell" id="slot10-thursday"></div>
-        <div class="cell" id="slot10-friday"></div>
-        
-        <div class="time-slot">4:20 PM</div>
-        <div class="cell" id="slot11-monday"></div>
-        <div class="cell" id="slot11-tuesday"></div>
-        <div class="cell" id="slot11-wednesday"></div>
-        <div class="cell" id="slot11-thursday"></div>
-        <div class="cell" id="slot11-friday"></div>
-        
-        <div class="time-slot">5:10 PM</div>
-        <div class="cell" id="slot12-monday"></div>
-        <div class="cell" id="slot12-tuesday"></div>
-        <div class="cell" id="slot12-wednesday"></div>
-        <div class="cell" id="slot12-thursday"></div>
-        <div class="cell" id="slot12-friday"></div>
-        
-        <div class="time-slot">6:00 PM</div>
-        <div class="cell" id="slot13-monday"></div>
-        <div class="cell" id="slot13-tuesday"></div>
-        <div class="cell" id="slot13-wednesday"></div>
-        <div class="cell" id="slot13-thursday"></div>
-        <div class="cell" id="slot13-friday"></div>
-        
-        <div class="time-slot">6:50 PM</div>
-        <div class="cell" id="slot14-monday"></div>
-        <div class="cell" id="slot14-tuesday"></div>
-        <div class="cell" id="slot14-wednesday"></div>
-        <div class="cell" id="slot14-thursday"></div>
-        <div class="cell" id="slot14-friday"></div>
-    </div>
+            <div class="time-slot">8:50 AM</div>
+            <div class="cell" id="slot2-monday"></div>
+            <div class="cell" id="slot2-tuesday"></div>
+            <div class="cell" id="slot2-wednesday"></div>
+            <div class="cell" id="slot2-thursday"></div>
+            <div class="cell" id="slot2-friday"></div>
+            
+            <div class="time-slot">9:40 AM</div>
+            <div class="cell" id="slot3-monday"></div>
+            <div class="cell" id="slot3-tuesday"></div>
+            <div class="cell" id="slot3-wednesday"></div>
+            <div class="cell" id="slot3-thursday"></div>
+            <div class="cell" id="slot3-friday"></div>
+            
+            <div class="time-slot">10:30 AM</div>
+            <div class="cell" id="slot4-monday"></div>
+            <div class="cell" id="slot4-tuesday"></div>
+            <div class="cell" id="slot4-wednesday"></div>
+            <div class="cell" id="slot4-thursday"></div>
+            <div class="cell" id="slot4-friday"></div>
+            
+            <div class="time-slot">11:20 AM</div>
+            <div class="cell" id="slot5-monday"></div>
+            <div class="cell" id="slot5-tuesday"></div>
+            <div class="cell" id="slot5-wednesday"></div>
+            <div class="cell" id="slot5-thursday"></div>
+            <div class="cell" id="slot5-friday"></div>
+            
+            <div class="time-slot">12:10 PM</div>
+            <div class="cell" id="slot6-monday"></div>
+            <div class="cell" id="slot6-tuesday"></div>
+            <div class="cell" id="slot6-wednesday"></div>
+            <div class="cell" id="slot6-thursday"></div>
+            <div class="cell" id="slot6-friday"></div>
+            
+            <div class="time-slot">1:00 PM</div>
+            <div class="cell" id="slot7-monday"></div>
+            <div class="cell" id="slot7-tuesday"></div>
+            <div class="cell" id="slot7-wednesday"></div>
+            <div class="cell" id="slot7-thursday"></div>
+            <div class="cell" id="slot7-friday"></div>
+            
+            <div class="time-slot">1:50 PM</div>
+            <div class="cell" id="slot8-monday"></div>
+            <div class="cell" id="slot8-tuesday"></div>
+            <div class="cell" id="slot8-wednesday"></div>
+            <div class="cell" id="slot8-thursday"></div>
+            <div class="cell" id="slot8-friday"></div>
+            
+            <div class="time-slot">2:40 PM</div>
+            <div class="cell" id="slot9-monday"></div>
+            <div class="cell" id="slot9-tuesday"></div>
+            <div class="cell" id="slot9-wednesday"></div>
+            <div class="cell" id="slot9-thursday"></div>
+            <div class="cell" id="slot9-friday"></div>
+            
+            <div class="time-slot">3:30 PM</div>
+            <div class="cell" id="slot10-monday"></div>
+            <div class="cell" id="slot10-tuesday"></div>
+            <div class="cell" id="slot10-wednesday"></div>
+            <div class="cell" id="slot10-thursday"></div>
+            <div class="cell" id="slot10-friday"></div>
+            
+            <div class="time-slot">4:20 PM</div>
+            <div class="cell" id="slot11-monday"></div>
+            <div class="cell" id="slot11-tuesday"></div>
+            <div class="cell" id="slot11-wednesday"></div>
+            <div class="cell" id="slot11-thursday"></div>
+            <div class="cell" id="slot11-friday"></div>
+            
+            <div class="time-slot">5:10 PM</div>
+            <div class="cell" id="slot12-monday"></div>
+            <div class="cell" id="slot12-tuesday"></div>
+            <div class="cell" id="slot12-wednesday"></div>
+            <div class="cell" id="slot12-thursday"></div>
+            <div class="cell" id="slot12-friday"></div>
+            
+            <div class="time-slot">6:00 PM</div>
+            <div class="cell" id="slot13-monday"></div>
+            <div class="cell" id="slot13-tuesday"></div>
+            <div class="cell" id="slot13-wednesday"></div>
+            <div class="cell" id="slot13-thursday"></div>
+            <div class="cell" id="slot13-friday"></div>
+            
+            <div class="time-slot">6:50 PM</div>
+            <div class="cell" id="slot14-monday"></div>
+            <div class="cell" id="slot14-tuesday"></div>
+            <div class="cell" id="slot14-wednesday"></div>
+            <div class="cell" id="slot14-thursday"></div>
+            <div class="cell" id="slot14-friday"></div>
+        </div>
     </div>
 
     <div class="legend">
@@ -738,9 +835,9 @@
     <footer>
         <div class="footer-content">
             <div class="social-links">
-                <a href="https://www.instagram.com/__arun_a_k/" target="_blank" class="insta-link">
+                <a href="https://www.instagram.com/your_username" target="_blank" class="insta-link">
                     <span class="insta-icon">📷</span>
-                    <span>@__arun_a_k</span>
+                    <span>@your_username</span>
                 </a>
             </div>
             <p class="creator-text">&copy; 2025 Created by ARUN AK. All Rights Reserved.</p>
@@ -751,35 +848,24 @@
         let timetableData = null;
         let todayMode = false;
 
-        // Time slots mapping
-        const timeSlots = {
-            'slot1': '8:00 AM',
-            'slot2': '8:50 AM', 
-            'slot3': '9:40 AM',
-            'slot4': '10:30 AM',
-            'slot5': '11:20 AM',
-            'slot6': '12:10 PM',
-            'slot7': '1:00 PM',
-            'slot8': '1:50 PM',
-            'slot9': '2:40 PM',
-            'slot10': '3:30 PM',
-            'slot11': '4:20 PM',
-            'slot12': '5:10 PM',
-            'slot13': '6:00 PM',
-            'slot14': '6:50 PM'
-        };
-
-        // Load timetable data
-        fetch('2q14.json')
-        .then(response => response.json())
-        .then(data => {
-            timetableData = data["2Q14"];
-            populateTimetable(timetableData);
-            initializeTodayMode();
-        })
-        .catch(error => {
-            console.error('Error loading timetable:', error);
-        });
+  
+        // Initialize with sample data (replace with actual JSON fetch)
+        function initializeApp() {
+            // Try to fetch from JSON file, fallback to sample data
+            fetch('2q14.json')
+                .then(response => response.json())
+                .then(data => {
+                    timetableData = data["2Q14"];
+                    populateTimetable(timetableData);
+                    initializeTodayMode();
+                })
+                .catch(error => {
+                    console.log('JSON file not found, using sample data');
+                    timetableData = sampleData["2Q14"];
+                    populateTimetable(timetableData);
+                    initializeTodayMode();
+                });
+        }
 
         function populateTimetable(classData) {
             console.log('Timetable data loaded:', classData);
@@ -801,7 +887,7 @@
                     const cellId = `${slotKey}-${day}`;
                     const cellElement = document.getElementById(cellId);
                     
-                    if (cellElement && dayData[slotKey]) {
+                    if (cellElement && dayData && dayData[slotKey]) {
                         const courseData = dayData[slotKey];
                         const courseType = getCourseType(courseData.Course);
                         
@@ -1122,10 +1208,11 @@
             return hours * 60 + minutes;
         }
 
-        // Initialize week mode by default
+        // Initialize the app when page loads
         window.addEventListener('load', () => {
             const weekBtn = document.getElementById('week-btn');
             weekBtn.classList.add('active');
+            initializeApp();
         });
     </script>
 </body>
