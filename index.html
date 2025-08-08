@@ -115,6 +115,12 @@
             border-left-color: #dc2626;
         }
 
+        .agenda-item.completed {
+            border-left-color: #6b7280;
+            background: #f9fafb;
+            opacity: 0.8;
+        }
+
         .agenda-time {
             font-weight: 600;
             color: #1a1a1a;
@@ -158,6 +164,11 @@
         .agenda-status.upcoming {
             background: #e5e5e5;
             color: #6b7280;
+        }
+
+        .agenda-status.completed {
+            background: #6b7280;
+            color: white;
         }
 
         .no-classes {
@@ -346,6 +357,28 @@
             top: 4px;
             left: 4px;
             background: #059669;
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 2px 4px;
+            border-radius: 3px;
+            z-index: 11;
+        }
+
+        /* Completed class styling */
+        .cell.completed-class {
+            border: 2px solid #6b7280 !important;
+            background: linear-gradient(135deg, #f9fafb, #f3f4f6) !important;
+            opacity: 0.7;
+            position: relative;
+        }
+
+        .cell.completed-class::before {
+            content: 'DONE';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            background: #6b7280;
             color: white;
             font-size: 0.6rem;
             font-weight: 700;
@@ -648,7 +681,8 @@
             }
 
             .cell.current-class::before,
-            .cell.next-class::before {
+            .cell.next-class::before,
+            .cell.completed-class::before {
                 font-size: 0.5rem;
                 padding: 1px 3px;
                 top: 2px;
@@ -900,9 +934,9 @@
     <footer>
         <div class="footer-content">
             <div class="social-links">
-                <a href="https://www.instagram.com/__arun_a_k/" target="_blank" class="insta-link">
+                <a href="https://www.instagram.com/your_username" target="_blank" class="insta-link">
                     <span class="insta-icon">📷</span>
-                    <span>@__arun_a_k</span>
+                    <span>@your_username</span>
                 </a>
             </div>
             <p class="creator-text">&copy; 2025 Created by ARUN AK. All Rights Reserved.</p>
@@ -1045,8 +1079,9 @@
             
             let currentClass = null;
             let nextClass = null;
+            const completedClasses = [];
             
-            // Check each slot for current and next classes
+            // Check each slot for current, next, and completed classes
             for (let slot = 1; slot <= 14; slot++) {
                 const slotKey = `slot${slot}`;
                 const slotData = dayData[slotKey];
@@ -1057,6 +1092,10 @@
                     // Check if this is the current class
                     if (currentTime >= slotTime.start && currentTime <= slotTime.end) {
                         currentClass = { slot, day, data: slotData };
+                    }
+                    // Check if this class is completed
+                    else if (currentTime > slotTime.end) {
+                        completedClasses.push({ slot, day, data: slotData });
                     }
                     // Check if this is the next class
                     else if (currentTime < slotTime.start && !nextClass) {
@@ -1085,6 +1124,15 @@
                     cell.classList.add('next-class');
                 }
             }
+            
+            // Apply completed class highlights
+            completedClasses.forEach((completedClass) => {
+                const cellId = `slot${completedClass.slot}-${completedClass.day}`;
+                const cell = document.getElementById(cellId);
+                if (cell) {
+                    cell.classList.add('completed-class');
+                }
+            });
         }
 
         function getSlotTimeRange(slot) {
@@ -1109,8 +1157,8 @@
         }
 
         function clearClassHighlights() {
-            document.querySelectorAll('.current-class, .next-class').forEach(cell => {
-                cell.classList.remove('current-class', 'next-class');
+            document.querySelectorAll('.current-class, .next-class, .completed-class').forEach(cell => {
+                cell.classList.remove('current-class', 'next-class', 'completed-class');
                 cell.style.removeProperty('--duration');
             });
         }
@@ -1239,10 +1287,13 @@
                 let status = 'upcoming';
                 let statusText = 'Upcoming';
                 
-                // Determine if current, next, or upcoming using the same logic as live indicator
+                // Determine status based on current time vs class time
                 if (currentTime >= slotTimeRange.start && currentTime <= slotTimeRange.end) {
                     status = 'current';
                     statusText = 'LIVE NOW';
+                } else if (currentTime > slotTimeRange.end) {
+                    status = 'completed';
+                    statusText = 'Completed';
                 } else if (currentTime < slotTimeRange.start && !nextClassFound) {
                     status = 'next';
                     const minutesUntil = slotTimeRange.start - currentTime;
