@@ -161,17 +161,17 @@
       "slot7": null,
       "slot8": null,
       "slot9": null,
-      "slot10": null,
+      "slot10": {
+        "Course": "ENGINEERING DESIGN PROJECT-I (MANGONEL) LAB",
+        "Room": "F314",
+        "Instructor": "NULL"
+      },
       "slot11": {
         "Course": "ENGINEERING DESIGN PROJECT-I (MANGONEL) LAB",
         "Room": "F314",
         "Instructor": "NULL"
       },
-      "slot12": {
-        "Course": "ENGINEERING DESIGN PROJECT-I (MANGONEL) LAB",
-        "Room": "F314",
-        "Instructor": "NULL"
-      },
+      "slot12": null,
       "slot13": null,
       "slot14": null
     },
