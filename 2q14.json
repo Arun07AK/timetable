@@ -10,19 +10,19 @@
       "slot6": null,
       "slot7": {
         "Course": "UCS320L ALTERNATE FROM SECOND WEEK",
-        "Room": "lt403",
+        "Room": "LT403",
         "Instructor": "null"
       },
       "slot8": {
         "Course": "DATA STRUCTURES",
-        "Room": "lt403",
+        "Room": "LT403",
         "Instructor": "Dr. Kapil Rana"
         
 
       },
       "slot9": {
         "Course": "OPERATING SYSTEMS",
-        "Room": "lt403",
+        "Room": "LT403",
         "Instructor": "Dr. Jayendra Barua"
       },
       "slot10": {
@@ -44,12 +44,12 @@
     "tuesday": {
       "slot1": {
         "Course": "DATA STRUCTURES",
-        "Room": "lt403",
+        "Room": "LT403",
         "Instructor": "Dr. Kapil Rana"
       },
       "slot2": {
         "Course": "NUMERICAL LINEAR ALGEBRA",
-        "Room": "lt403",
+        "Room": "LT403",
         "Instructor": "MD HASANUZZAMAN",
         "link": "https://classroom.google.com/u/1/c/NzkwMzQ2NTM5MjUw"
       },
@@ -59,17 +59,17 @@
       "slot6": null,
       "slot7": {
         "Course": "OBJECT ORIENTED PROGRAMMING",
-        "Room": "lt303",
+        "Room": "LT303",
         "Instructor": "null"
       },
       "slot8": {
         "Course": "OPERATING SYSTEMS",
-        "Room": "lt303",
+        "Room": "LT303",
         "Instructor": "Dr. Jayendra Barua"
       },
       "slot9": {
         "Course": "DISCRETE MATHEMATICAL STRUCTURES",
-        "Room": "lt303",
+        "Room": "LT303",
         "Instructor": "dr Aditi sharma"
       },
       "slot10": {
@@ -92,28 +92,28 @@
     "wednesday": {
       "slot1": {
         "Course": "DATA STRUCTURES LAB",
-        "Room": "ds-2",
+        "Room": "DS-2",
         "Instructor": "Dr. Kapil Rana"
       },
       "slot2": {
         "Course": "DATA STRUCTURES LAB",
-        "Room": "ds-2",
+        "Room": "DS-2",
         "Instructor": "Dr. Kapil Rana"
       },
       "slot3": {
         "Course": "Discrete Mathematics Tutorial ",
-        "Room": "f110",
+        "Room": "F110",
         "Instructor": "dr Aditi sharma"
       },
       "slot4": null,
       "slot5": {
         "Course": "DISCRETE MATHEMATICAL STRUCTURES",
-        "Room": "lt302",
+        "Room": "LT302",
         "Instructor": "dr Aditi sharma"
       },
       "slot6": {
         "Course": "NUMERICAL LINEAR ALGEBRA",
-        "Room": "lt302",
+        "Room": "LT302",
         "Instructor": "MD HASANUZZAMAN",
         "link": "https://classroom.google.com/u/1/c/NzkwMzQ2NTM5MjUw"
       },
@@ -123,13 +123,13 @@
       "slot10": null,
       "slot11": {
         "Course": "ENGINEERING DESIGN PROJECT-I (MANGONEL)",
-        "Room": "lt101/lt102",
+        "Room": "LT101/LT102",
         "Instructor": "ROHIT KUMAR SINGLA",
         "link": "https://sites.google.com/view/rohitkumarsingla/teaching/uta016-engineering-design-project-i"
       },
       "slot12": {
         "Course": "UHU050L",
-        "Room": "lp101",
+        "Room": "LP101",
         "Instructor": "null"
       },
       "slot13": null,
@@ -138,22 +138,22 @@
     "thursday": {
       "slot1": {
         "Course": "OBJECT ORIENTED PROGRAMMING",
-        "Room": "lt403",
+        "Room": "LT403",
         "Instructor": "null"
       },
       "slot2": {
         "Course": "OPERATING SYSTEMS",
-        "Room": "lt403",
+        "Room": "LT403",
         "Instructor": "Dr. Jayendra Barua"
       },
       "slot3": {
         "Course": "NLA LAB",
-        "Room": "g309",
+        "Room": "G309",
         "Instructor": "NULL"
       },
       "slot4": {
          "Course": "NLA LAB",
-        "Room": "g309",
+        "Room": "G309",
         "Instructor": "NULL"
       },
       "slot5": null,
@@ -164,12 +164,12 @@
       "slot10": null,
       "slot11": {
         "Course": "ENGINEERING DESIGN PROJECT-I (MANGONEL) LAB",
-        "Room": "f314",
+        "Room": "F314",
         "Instructor": "NULL"
       },
       "slot12": {
         "Course": "ENGINEERING DESIGN PROJECT-I (MANGONEL) LAB",
-        "Room": "f314",
+        "Room": "F314",
         "Instructor": "NULL"
       },
       "slot13": null,
@@ -185,23 +185,23 @@
       "slot7": null,
       "slot8": {
         "Course": "OBJECT ORIENTED PROGRAMMING",
-        "Room": "lt403",
+        "Room": "LT403",
         "Instructor": "null"
       },
       "slot9": {
         "Course": "NUMERICAL LINEAR ALGEBRA",
-        "Room": "lt403",
+        "Room": "LT403",
         "Instructor": "MD HASANUZZAMAN",
         "link": "https://classroom.google.com/u/1/c/NzkwMzQ2NTM5MjUw"
       },
       "slot10": {
         "Course": "DISCRETE MATHEMATICAL STRUCTURES",
-        "Room": "lt403",
+        "Room": "LT403",
         "Instructor": "dr Aditi sharma"
       },
       "slot11": {
         "Course": "DATA STRUCTURES",
-        "Room": "lt403",
+        "Room": "LT403",
         "Instructor": "Dr. Kapil Rana"
       },
       "slot12": null,
