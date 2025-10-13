@@ -122,10 +122,10 @@
       "slot9": null,
       "slot10": null,
       "slot11": {
-        "Course": "ENGINEERING DESIGN PROJECT-I (MANGONEL)",
+        "Course": "ENGINEERING DESIGN PROJECT",
         "Room": "LT101/LT102",
-        "Instructor": "ROHIT KUMAR SINGLA",
-        "link": "https://sites.google.com/view/rohitkumarsingla/teaching/uta016-engineering-design-project-i"
+        "Instructor": "NULL",
+        "link": ""
       },
       "slot12": {
         "Course": "UHU050L",
@@ -162,13 +162,13 @@
       "slot8": null,
       "slot9": null,
       "slot10": {
-        "Course": "ENGINEERING DESIGN PROJECT-I (MANGONEL) LAB",
-        "Room": "F314",
+        "Course": "ENGINEERING DESIGN PROJECT-II",
+        "Room": "C202",
         "Instructor": "NULL"
       },
       "slot11": {
-        "Course": "ENGINEERING DESIGN PROJECT-I (MANGONEL) LAB",
-        "Room": "F314",
+        "Course": "ENGINEERING DESIGN PROJECT-II",
+        "Room": "C202",
         "Instructor": "NULL"
       },
       "slot12": null,
