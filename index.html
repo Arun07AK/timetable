@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2Q14 Timetable</title>
+    <title>2Q14 Timetable - Semester IV</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
         * {
@@ -31,7 +31,7 @@
             flex-wrap: wrap;
         }
 
-        .today-btn, .week-btn {
+        .today-btn, .week-btn, .download-btn {
             padding: 12px 24px;
             border: 2px solid #3b82f6;
             background: white;
@@ -43,9 +43,28 @@
             transition: all 0.2s ease;
         }
 
+        .download-btn {
+            border-color: #8b5cf6;
+            color: #8b5cf6;
+        }
+
         .today-btn.active, .week-btn.active {
             background: #3b82f6;
             color: white;
+        }
+
+        .download-btn:hover {
+            background: #8b5cf6;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        .download-btn.downloading {
+            background: #8b5cf6;
+            color: white;
+            pointer-events: none;
+            opacity: 0.7;
         }
 
         .today-btn:hover, .week-btn:hover {
@@ -199,8 +218,22 @@
             color: #1a1a1a;
             font-size: 2.5rem;
             font-weight: 600;
-            margin-bottom: 40px;
+            margin-bottom: 10px;
             letter-spacing: -0.02em;
+        }
+
+        .semester-badge {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .semester-badge span {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
         }
 
         /* Timetable wrapper for horizontal scroll */
@@ -212,7 +245,7 @@
             -webkit-overflow-scrolling: touch;
             scrollbar-width: thin;
             scrollbar-color: #cbd5e0 #f7fafc;
-            padding: 0 15px; /* Increased padding to ensure full visibility */
+            padding: 0 15px;
         }
 
         .timetable-wrapper::-webkit-scrollbar {
@@ -236,7 +269,7 @@
         .timetable-container {
             display: grid;
             grid-template-columns: 120px repeat(5, minmax(180px, 1fr));
-            min-width: 1220px; /* Calculated: 120px + (5 × 180px) + margins */
+            min-width: 1220px;
             background: white;
             border-radius: 12px;
             overflow: hidden;
@@ -245,7 +278,6 @@
             position: relative;
         }
 
-        /* Ensure Friday column is fully visible */
         .timetable-container::after {
             content: '';
             width: 20px;
@@ -388,7 +420,6 @@
             z-index: 11;
         }
 
-        /* Time progress indicator in cells */
         .cell.current-class .course-name::after {
             content: '';
             position: absolute;
@@ -456,7 +487,7 @@
             background: #f9f9f9;
         }
 
-        /* Course type styling - clean and minimal */
+        /* Course type styling */
         .cell.has-class {
             background: #fff;
             border-left: 4px solid #3b82f6;
@@ -518,7 +549,7 @@
             background: rgba(59, 130, 246, 0.2);
         }
 
-        /* Type indicators - simple and clean */
+        /* Type indicators */
         .type-indicator {
             position: absolute;
             top: 8px;
@@ -567,6 +598,53 @@
         .legend-dot.lab { background: #059669; }
         .legend-dot.tutorial { background: #dc2626; }
 
+        /* Subject Reference Table */
+        .subject-reference {
+            max-width: 800px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e5e5;
+        }
+
+        .subject-reference h3 {
+            margin-bottom: 16px;
+            color: #1a1a1a;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .subject-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .subject-table th,
+        .subject-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .subject-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .subject-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .subject-table .code {
+            font-family: 'SF Mono', Monaco, monospace;
+            color: #3b82f6;
+            font-weight: 500;
+        }
+
         footer {
             text-align: center;
             margin-top: 40px;
@@ -574,25 +652,25 @@
             font-size: 0.8rem;
         }
 
-        /* Enhanced Mobile Responsiveness */
+        /* Mobile Responsiveness */
         @media (max-width: 768px) {
             body {
-                padding: 15px 5px; /* Reduced padding for more scroll space */
+                padding: 15px 5px;
             }
 
             .timetable-wrapper {
-                padding: 0 10px; /* Increased wrapper padding on mobile */
+                padding: 0 10px;
             }
 
             .timetable-container {
                 grid-template-columns: 90px repeat(5, minmax(160px, 1fr));
-                min-width: 990px; /* Calculated: 90px + (5 × 160px) + margins */
+                min-width: 990px;
                 font-size: 0.7rem;
             }
             
             h1 {
                 font-size: 1.8rem;
-                margin-bottom: 25px;
+                margin-bottom: 8px;
             }
             
             .header, .time-slot, .cell {
@@ -636,7 +714,7 @@
                 gap: 12px;
             }
 
-            .today-btn, .week-btn {
+            .today-btn, .week-btn, .download-btn {
                 padding: 10px 20px;
                 font-size: 0.8rem;
                 width: 100%;
@@ -697,7 +775,6 @@
                 right: 6px;
             }
 
-            /* Mobile scroll hint */
             .timetable-wrapper::before {
                 content: "← Swipe left and right to see all days →";
                 display: block;
@@ -710,20 +787,34 @@
                 border-bottom: 1px solid #e5e5e5;
                 font-weight: 500;
             }
+
+            .subject-reference {
+                margin: 20px 10px;
+                padding: 16px;
+            }
+
+            .subject-table {
+                font-size: 0.75rem;
+            }
+
+            .subject-table th,
+            .subject-table td {
+                padding: 8px 6px;
+            }
         }
 
         @media (max-width: 480px) {
             body {
-                padding: 10px 2px; /* Minimal padding for maximum scroll space */
+                padding: 10px 2px;
             }
 
             .timetable-wrapper {
-                padding: 0 8px; /* Increased wrapper padding for small screens */
+                padding: 0 8px;
             }
 
             .timetable-container {
                 grid-template-columns: 80px repeat(5, minmax(150px, 1fr));
-                min-width: 930px; /* Calculated: 80px + (5 × 150px) + margins */
+                min-width: 930px;
             }
             
             .header, .time-slot, .cell {
@@ -767,11 +858,10 @@
             }
         }
 
-        /* Tablet landscape improvements */
         @media (min-width: 769px) and (max-width: 1024px) {
             .timetable-container {
                 grid-template-columns: 100px repeat(5, minmax(170px, 1fr));
-                min-width: 1050px; /* Calculated: 100px + (5 × 170px) + margins */
+                min-width: 1050px;
             }
 
             .header, .time-slot, .cell {
@@ -791,11 +881,15 @@
 </head>
 <body>
     <h1>2Q14 Timetable</h1>
+    <div class="semester-badge">
+        <span>📚 Semester IV • Jan - May 2026</span>
+    </div>
     
     <!-- Today's Focus Controls -->
     <div class="controls">
         <button id="today-btn" class="today-btn">📅 Today's Focus</button>
         <button id="week-btn" class="week-btn">📋 Full Week</button>
+        <button id="download-btn" class="download-btn"> Download as Image</button>
         <div id="current-time" class="current-time"></div>
     </div>
 
@@ -807,7 +901,7 @@
         </div>
     </div>
     
-    <!-- Added wrapper for horizontal scrolling -->
+    <!-- Timetable wrapper for horizontal scrolling -->
     <div class="timetable-wrapper">
         <div class="timetable-container">
             <div class="header">Time</div>
@@ -930,6 +1024,57 @@
             <div class="legend-dot tutorial"></div>
             <span>Tutorial</span>
         </div>
+    </div>
+
+    <!-- Subject Reference Table -->
+    <div class="subject-reference">
+        <h3>📖 Subject Code Reference</h3>
+        <table class="subject-table">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Subject</th>
+                    <th>Credits</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="code">UCS415</td>
+                    <td>Design and Analysis of Algorithms</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td class="code">UCS310</td>
+                    <td>Database Management Systems</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td class="code">UCS321</td>
+                    <td>AI for Engineers</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td class="code">UCS414</td>
+                    <td>Computer Networks</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td class="code">UMA401</td>
+                    <td>Probability and Statistics</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td class="code">UTA024</td>
+                    <td>Engineering Design Project II</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td class="code">UTD003</td>
+                    <td>Aptitude Skills Building</td>
+                    <td>2</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     
     <footer>
@@ -1090,15 +1235,12 @@
                 if (slotData) {
                     const slotTime = getSlotTimeRange(slot);
                     
-                    // Check if this is the current class
                     if (currentTime >= slotTime.start && currentTime <= slotTime.end) {
                         currentClass = { slot, day, data: slotData };
                     }
-                    // Check if this class is completed
                     else if (currentTime > slotTime.end) {
                         completedClasses.push({ slot, day, data: slotData });
                     }
-                    // Check if this is the next class
                     else if (currentTime < slotTime.start && !nextClass) {
                         nextClass = { slot, day, data: slotData };
                     }
@@ -1111,9 +1253,7 @@
                 const cell = document.getElementById(cellId);
                 if (cell) {
                     cell.classList.add('current-class');
-                    
-                    // Add progress animation
-                    const duration = 50 * 60 * 1000; // 50 minutes in milliseconds
+                    const duration = 50 * 60 * 1000;
                     cell.style.setProperty('--duration', `${duration}ms`);
                 }
             }
@@ -1126,7 +1266,6 @@
                 }
             }
             
-            // Apply completed class highlights
             completedClasses.forEach((completedClass) => {
                 const cellId = `slot${completedClass.slot}-${completedClass.day}`;
                 const cell = document.getElementById(cellId);
@@ -1171,14 +1310,11 @@
             const timetableContainer = document.querySelector('.timetable-container');
             const todayAgenda = document.getElementById('today-agenda');
             
-            // Update button states
             todayBtn.classList.add('active');
             weekBtn.classList.remove('active');
             
-            // Show today's agenda
             todayAgenda.classList.remove('hidden');
             
-            // Highlight today's column
             const today = getCurrentDay();
             if (today) {
                 highlightTodayColumn(today);
@@ -1194,14 +1330,11 @@
             const timetableContainer = document.querySelector('.timetable-container');
             const todayAgenda = document.getElementById('today-agenda');
             
-            // Update button states
             todayBtn.classList.remove('active');
             weekBtn.classList.add('active');
             
-            // Hide today's agenda
             todayAgenda.classList.add('hidden');
             
-            // Remove highlighting
             timetableContainer.classList.remove('today-mode');
             clearTodayHighlight();
         }
@@ -1211,7 +1344,6 @@
             const today = new Date().getDay();
             const dayName = days[today];
             
-            // Only return if it's a weekday
             if (dayName === 'monday' || dayName === 'tuesday' || dayName === 'wednesday' || 
                 dayName === 'thursday' || dayName === 'friday') {
                 return dayName;
@@ -1223,13 +1355,11 @@
             const dayIndex = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'].indexOf(day);
             if (dayIndex === -1) return;
             
-            // Highlight header
             const headers = document.querySelectorAll('.header');
-            if (headers[dayIndex + 1]) { // +1 because first header is "Time"
+            if (headers[dayIndex + 1]) {
                 headers[dayIndex + 1].classList.add('today-column');
             }
             
-            // Highlight all cells in today's column
             for (let slot = 1; slot <= 14; slot++) {
                 const cellId = `slot${slot}-${day}`;
                 const cell = document.getElementById(cellId);
@@ -1256,7 +1386,6 @@
 
             const todayClasses = [];
             
-            // Collect today's classes
             for (let slot = 1; slot <= 14; slot++) {
                 const slotKey = `slot${slot}`;
                 if (dayData[slotKey]) {
@@ -1274,7 +1403,6 @@
                 return;
             }
 
-            // Get current time for status determination
             const now = new Date();
             const currentTime = now.getHours() * 60 + now.getMinutes();
 
@@ -1288,7 +1416,6 @@
                 let status = 'upcoming';
                 let statusText = 'Upcoming';
                 
-                // Determine status based on current time vs class time
                 if (currentTime >= slotTimeRange.start && currentTime <= slotTimeRange.end) {
                     status = 'current';
                     statusText = 'LIVE NOW';
@@ -1340,7 +1467,104 @@
         window.addEventListener('load', () => {
             const weekBtn = document.getElementById('week-btn');
             weekBtn.classList.add('active');
+
+            // Download button functionality
+            const downloadBtn = document.getElementById('download-btn');
+            downloadBtn.addEventListener('click', downloadTimetableAsImage);
         });
+
+        async function downloadTimetableAsImage() {
+            const downloadBtn = document.getElementById('download-btn');
+            const originalText = downloadBtn.innerHTML;
+            
+            // Show loading state
+            downloadBtn.innerHTML = '⏳ Generating...';
+            downloadBtn.classList.add('downloading');
+
+            try {
+                // Create a wrapper for the download content
+                const wrapper = document.createElement('div');
+                wrapper.style.cssText = 'position: absolute; left: -9999px; top: 0; background: #fafafa; padding: 30px;';
+                document.body.appendChild(wrapper);
+
+                // Clone the title
+                const title = document.querySelector('h1').cloneNode(true);
+                wrapper.appendChild(title);
+
+                // Clone semester badge
+                const badge = document.querySelector('.semester-badge').cloneNode(true);
+                wrapper.appendChild(badge);
+
+                // Clone the timetable container (not the wrapper with scroll)
+                const timetable = document.querySelector('.timetable-container').cloneNode(true);
+                timetable.style.cssText = 'margin: 20px 0; min-width: auto; width: 1200px;';
+                
+                // Remove live status classes (LIVE, NEXT, DONE) from cloned timetable
+                timetable.querySelectorAll('.current-class').forEach(cell => {
+                    cell.classList.remove('current-class');
+                });
+                timetable.querySelectorAll('.next-class').forEach(cell => {
+                    cell.classList.remove('next-class');
+                });
+                timetable.querySelectorAll('.completed-class').forEach(cell => {
+                    cell.classList.remove('completed-class');
+                });
+                
+                // Also remove today-mode highlighting if present
+                timetable.classList.remove('today-mode');
+                timetable.querySelectorAll('.today-column').forEach(cell => {
+                    cell.classList.remove('today-column');
+                });
+                
+                wrapper.appendChild(timetable);
+
+                // Clone the legend
+                const legend = document.querySelector('.legend').cloneNode(true);
+                legend.style.cssText = 'display: flex; justify-content: center; gap: 24px; margin-top: 20px; font-size: 0.8rem; color: #6b7280;';
+                wrapper.appendChild(legend);
+
+                // Add watermark/credit
+                const credit = document.createElement('div');
+                credit.style.cssText = 'text-align: center; margin-top: 20px; color: #9ca3af; font-size: 0.8rem;';
+                credit.innerHTML = '2Q14 Timetable • Semester IV • Jan - May 2026 • Created by ARUN AK';
+                wrapper.appendChild(credit);
+
+                // Generate canvas
+                const canvas = await html2canvas(wrapper, {
+                    scale: 2,
+                    backgroundColor: '#fafafa',
+                    logging: false,
+                    useCORS: true,
+                    allowTaint: true,
+                    width: 1260,
+                    windowWidth: 1260
+                });
+
+                // Remove the temporary wrapper
+                document.body.removeChild(wrapper);
+
+                // Create download link
+                const link = document.createElement('a');
+                link.download = '2Q14_Timetable_Sem4.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                // Show success
+                downloadBtn.innerHTML = '✅ Downloaded!';
+                setTimeout(() => {
+                    downloadBtn.innerHTML = originalText;
+                    downloadBtn.classList.remove('downloading');
+                }, 2000);
+
+            } catch (error) {
+                console.error('Error generating image:', error);
+                downloadBtn.innerHTML = '❌ Error';
+                setTimeout(() => {
+                    downloadBtn.innerHTML = originalText;
+                    downloadBtn.classList.remove('downloading');
+                }, 2000);
+            }
+        }
     </script>
 </body>
 </html>
