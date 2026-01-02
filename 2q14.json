@@ -1,41 +1,40 @@
-
 {
   "2Q14": {
     "monday": {
       "slot1": null,
       "slot2": null,
-      "slot3": null,
-      "slot4": null,
-      "slot5": null,
-      "slot6": null,
-      "slot7": {
-        "Course": "UCS320L ALTERNATE FROM SECOND WEEK",
-        "Room": "LT403",
-        "Instructor": "null"
+      "slot3": {
+        "Course": "AI FOR ENGINEERS",
+        "Room": "LT303",
+        "Instructor": "RTS"
       },
-      "slot8": {
-        "Course": "DATA STRUCTURES",
-        "Room": "LT403",
-        "Instructor": "Dr. Kapil Rana"
-        
-
+      "slot4": {
+        "Course": "AI FOR ENGINEERS",
+        "Room": "LT303",
+        "Instructor": "RTS"
       },
-      "slot9": {
-        "Course": "OPERATING SYSTEMS",
-        "Room": "LT403",
-        "Instructor": "Dr. Jayendra Barua"
+      "slot5": {
+        "Course": "ENGINEERING DESIGN PROJECT II LAB",
+        "Room": "L209/B216",
+        "Instructor": "NAD-RA/APC-11"
       },
+      "slot6": {
+        "Course": "ENGINEERING DESIGN PROJECT II LAB",
+        "Room": "L209/B216",
+        "Instructor": "NAD-RA/APC-11"
+      },
+      "slot7": null,
+      "slot8": null,
+      "slot9": null,
       "slot10": {
-        "Course": "OBJECT ORIENTED PROGRAMMING LAB",
-        "Room": "PL-4",
-        "Instructor": "Subhrendu Chattopadhyay",
-        "link": "https://classroom.google.com/c/Nzk0NTIwOTg4NjA2?cjc=p6lvgwlv"
+        "Course": "DESIGN & ANALYSIS OF ALGORITHMS",
+        "Room": "LT102",
+        "Instructor": "KAP"
       },
       "slot11": {
-        "Course": "OBJECT ORIENTED PROGRAMMING LAB",
-        "Room": "PL-4",
-        "Instructor": "Subhrendu Chattopadhyay",
-        "link": "https://classroom.google.com/c/Nzk0NTIwOTg4NjA2?cjc=p6lvgwlv"
+        "Course": "DATABASE MANAGEMENT SYSTEMS",
+        "Room": "LT102",
+        "Instructor": "MHK"
       },
       "slot12": null,
       "slot13": null,
@@ -43,167 +42,156 @@
     },
     "tuesday": {
       "slot1": {
-        "Course": "DATA STRUCTURES",
-        "Room": "LT403",
-        "Instructor": "Dr. Kapil Rana"
+        "Course": "DESIGN & ANALYSIS OF ALGORITHMS LAB",
+        "Room": "DS-2",
+        "Instructor": "ARU-RA"
       },
       "slot2": {
-        "Course": "NUMERICAL LINEAR ALGEBRA",
-        "Room": "LT403",
-        "Instructor": "MD HASANUZZAMAN",
-        "link": "https://classroom.google.com/u/1/c/NzkwMzQ2NTM5MjUw"
+        "Course": "DESIGN & ANALYSIS OF ALGORITHMS LAB",
+        "Room": "DS-2",
+        "Instructor": "ARU-RA"
       },
       "slot3": null,
       "slot4": null,
       "slot5": null,
       "slot6": null,
       "slot7": {
-        "Course": "OBJECT ORIENTED PROGRAMMING",
-        "Room": "LT303",
-        "Instructor": "null"
+        "Course": "APTITUDE SKILLS BUILDING",
+        "Room": "LT102",
+        "Instructor": "VK"
       },
       "slot8": {
-        "Course": "OPERATING SYSTEMS",
-        "Room": "LT303",
-        "Instructor": "Dr. Jayendra Barua"
+        "Course": "APTITUDE SKILLS BUILDING",
+        "Room": "LT102",
+        "Instructor": "VK"
       },
-      "slot9": {
-        "Course": "DISCRETE MATHEMATICAL STRUCTURES",
-        "Room": "LT303",
-        "Instructor": "dr Aditi sharma"
-      },
-      "slot10": {
-        "Course": "OPERATING SYSTEMS LAB",
-        "Room": "SS-2",
-        "Instructor": "SHIVANI GOSWAMI",
-        "link": "https://classroom.google.com/u/1/c/NzkwNDE3Mjc4MzQ0"
-        
-      },
-      "slot11": {
-        "Course": "OPERATING SYSTEMS LAB",
-        "Room": "SS-2",
-        "Instructor": "SHIVANI GOSWAMI",
-        "link": "https://classroom.google.com/u/1/c/NzkwNDE3Mjc4MzQ0"
-      },
+      "slot9": null,
+      "slot10": null,
+      "slot11": null,
       "slot12": null,
       "slot13": null,
       "slot14": null
     },
     "wednesday": {
-      "slot1": {
-        "Course": "DATA STRUCTURES LAB",
-        "Room": "DS-2",
-        "Instructor": "Dr. Kapil Rana"
-      },
-      "slot2": {
-        "Course": "DATA STRUCTURES LAB",
-        "Room": "DS-2",
-        "Instructor": "Dr. Kapil Rana"
-      },
+      "slot1": null,
+      "slot2": null,
       "slot3": {
-        "Course": "Discrete Mathematics Tutorial ",
-        "Room": "F110",
-        "Instructor": "dr Aditi sharma"
-      },
-      "slot4": null,
-      "slot5": {
-        "Course": "DISCRETE MATHEMATICAL STRUCTURES",
-        "Room": "LT302",
-        "Instructor": "dr Aditi sharma"
-      },
-      "slot6": {
-        "Course": "NUMERICAL LINEAR ALGEBRA",
-        "Room": "LT302",
-        "Instructor": "MD HASANUZZAMAN",
-        "link": "https://classroom.google.com/u/1/c/NzkwMzQ2NTM5MjUw"
-      },
-      "slot7": null,
-      "slot8": null,
-      "slot9": null,
-      "slot10": null,
-      "slot11": {
-        "Course": "ENGINEERING DESIGN PROJECT",
-        "Room": "LT101/LT102",
-        "Instructor": "NULL",
-        "link": ""
-      },
-      "slot12": {
-        "Course": "UHU050L",
-        "Room": "LP101",
-        "Instructor": "null"
-      },
-      "slot13": null,
-      "slot14": null
-    },
-    "thursday": {
-      "slot1": {
-        "Course": "OBJECT ORIENTED PROGRAMMING",
-        "Room": "LT403",
-        "Instructor": "null"
-      },
-      "slot2": {
-        "Course": "OPERATING SYSTEMS",
-        "Room": "LT403",
-        "Instructor": "Dr. Jayendra Barua"
-      },
-      "slot3": {
-        "Course": "NLA LAB",
-        "Room": "G309",
-        "Instructor": "NULL"
+        "Course": "DATABASE MANAGEMENT SYSTEMS",
+        "Room": "LT102",
+        "Instructor": "MHK"
       },
       "slot4": {
-         "Course": "NLA LAB",
-        "Room": "G309",
-        "Instructor": "NULL"
+        "Course": "COMPUTER NETWORKS",
+        "Room": "LT102",
+        "Instructor": "HMG"
       },
-      "slot5": null,
-      "slot6": null,
+      "slot5": {
+        "Course": "PROBABILITY AND STATISTICS",
+        "Room": "LT102",
+        "Instructor": "VJK"
+      },
+      "slot6": {
+        "Course": "ENGINEERING DESIGN PROJECT II",
+        "Room": "LT102",
+        "Instructor": "KAS/SUR"
+      },
       "slot7": null,
-      "slot8": null,
-      "slot9": null,
+      "slot8": {
+        "Course": "DATABASE MANAGEMENT SYSTEMS LAB",
+        "Room": "DBMS-2",
+        "Instructor": "SIK"
+      },
+      "slot9": {
+        "Course": "DATABASE MANAGEMENT SYSTEMS LAB",
+        "Room": "DBMS-2",
+        "Instructor": "SIK"
+      },
       "slot10": {
-        "Course": "ENGINEERING DESIGN PROJECT-II",
-        "Room": "C202",
-        "Instructor": "NULL"
+        "Course": "AI FOR ENGINEERS LAB",
+        "Room": "LT303",
+        "Instructor": "RTS"
       },
       "slot11": {
-        "Course": "ENGINEERING DESIGN PROJECT-II",
-        "Room": "C202",
-        "Instructor": "NULL"
+        "Course": "AI FOR ENGINEERS LAB",
+        "Room": "LT303",
+        "Instructor": "RTS"
       },
       "slot12": null,
       "slot13": null,
       "slot14": null
     },
-    "friday": {
-      "slot1": null,
-      "slot2": null,
-      "slot3": null,
+    "thursday": {
+      "slot1": {
+        "Course": "DESIGN & ANALYSIS OF ALGORITHMS",
+        "Room": "LT102",
+        "Instructor": "KAP"
+      },
+      "slot2": {
+        "Course": "PROBABILITY AND STATISTICS",
+        "Room": "LT102",
+        "Instructor": "VJK"
+      },
+      "slot3": {
+        "Course": "COMPUTER NETWORKS",
+        "Room": "LT102",
+        "Instructor": "HMG"
+      },
       "slot4": null,
       "slot5": null,
       "slot6": null,
       "slot7": null,
       "slot8": {
-        "Course": "OBJECT ORIENTED PROGRAMMING",
-        "Room": "LT403",
-        "Instructor": "null"
+        "Course": "COMPUTER NETWORKS LAB",
+        "Room": "NS-2",
+        "Instructor": "GUK-RA"
       },
       "slot9": {
-        "Course": "NUMERICAL LINEAR ALGEBRA",
-        "Room": "LT403",
-        "Instructor": "MD HASANUZZAMAN",
-        "link": "https://classroom.google.com/u/1/c/NzkwMzQ2NTM5MjUw"
+        "Course": "COMPUTER NETWORKS LAB",
+        "Room": "NS-2",
+        "Instructor": "GUK-RA"
       },
-      "slot10": {
-        "Course": "DISCRETE MATHEMATICAL STRUCTURES",
-        "Room": "LT403",
-        "Instructor": "dr Aditi sharma"
+      "slot10": null,
+      "slot11": null,
+      "slot12": null,
+      "slot13": null,
+      "slot14": null
+    },
+    "friday": {
+      "slot1": {
+        "Course": "DATABASE MANAGEMENT SYSTEMS",
+        "Room": "LT102",
+        "Instructor": "MHK"
       },
-      "slot11": {
-        "Course": "DATA STRUCTURES",
-        "Room": "LT403",
-        "Instructor": "Dr. Kapil Rana"
+      "slot2": {
+        "Course": "COMPUTER NETWORKS",
+        "Room": "LT102",
+        "Instructor": "HMG"
       },
+      "slot3": null,
+      "slot4": null,
+      "slot5": {
+        "Course": "PROBABILITY & STATISTICS LAB",
+        "Room": "G307",
+        "Instructor": "TBA"
+      },
+      "slot6": {
+        "Course": "PROBABILITY & STATISTICS LAB",
+        "Room": "G307",
+        "Instructor": "TBA"
+      },
+      "slot7": null,
+      "slot8": {
+        "Course": "DESIGN & ANALYSIS OF ALGORITHMS",
+        "Room": "LT102",
+        "Instructor": "KAP"
+      },
+      "slot9": {
+        "Course": "PROBABILITY AND STATISTICS",
+        "Room": "LT102",
+        "Instructor": "VJK"
+      },
+      "slot10": null,
+      "slot11": null,
       "slot12": null,
       "slot13": null,
       "slot14": null
